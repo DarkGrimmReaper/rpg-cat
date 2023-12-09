@@ -1,0 +1,320 @@
+body {
+    font-family: 'Caveat', cursive;
+    font-size: 1.3rem;
+    background-color: #1a1a1a;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #2a2a2a;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+h1, h2 {
+    font-family: 'Lacquer', sans-serif;
+    text-align: center;
+}
+
+.group {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+input,
+textarea,
+.checkbox-group label {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-group h4 {
+    margin: 0; /* Remove a margem padrão do h4 */
+    line-height: 1; /* Define a altura da linha para evitar espaçamento extra */
+}
+
+.divider {
+    border-bottom: 1px solid #ddd;
+    margin: 20px 0;
+}
+
+.radio-group {
+    display: flex;
+}
+
+.radio-group label {
+    margin-right: 10px;
+}
+
+.checkbox-group {
+    display: flex;
+    gap: 10px; /* Adiciona um espaçamento entre os checkboxes */
+}
+
+.checkbox-group label {
+    margin: 0; /* Remove a margem inferior para evitar espaçamento extra */
+}
+
+.info-container {
+    display: flex;
+    align-items: center;
+}
+
+.info-inputs {
+    flex: 1;
+    margin-right: 20px; /* Adicione uma margem entre os inputs e a imagem */
+}
+
+/* Adicione essas linhas para ajustar o posicionamento da imagem */
+.profile-picture-upload {
+    width: 210px;
+    height: 280px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.profile-picture-upload input[type="file"] {
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+}
+
+.profile-picture-upload-label {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #ccc;
+    background-color: #fff;
+    box-sizing: border-box;
+    cursor: pointer;
+    /* Adiciona estilos para o botão de Adicionar Foto */
+    background-color: #3498db;
+    color: #fff;
+    border: 2px solid #2980b9;
+}
+
+.profile-picture-upload:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Adiciona estilos para o botão de Adicionar Foto ao passar o mouse */
+.profile-picture-upload-label:hover {
+    background-color: #45a049; /* Cor de fundo alterada ao passar o mouse */
+    border-color: #45a049; /* Cor da borda alterada ao passar o mouse */
+}
+
+/* Adiciona transição suave para o efeito */
+.profile-picture-upload,
+.profile-picture-upload-label {
+    transition: all 0.3s ease;
+}
+
+/* Adicione essas linhas para estilizar a imagem */
+.profile-picture-upload img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px; /* Adicione bordas arredondadas */
+}
+
+/* Adicione essas linhas para melhorar a visibilidade no hover */
+.profile-picture-upload:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Overlay semi-transparente */
+    border-radius: 8px;
+    opacity: 0; /* Inicialmente invisível */
+    transition: opacity 0.3s ease;
+}
+
+.profile-picture-upload:hover:before {
+    opacity: 1; /* Torna o overlay visível no hover */
+}
+
+.values-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Adicione essas linhas ao seu CSS */
+
+.values-attributes {
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-values,
+.right-values {
+    flex: 1;
+}
+
+.left-values label,
+.right-values label {
+    margin-bottom: 10px; /* Adiciona espaçamento inferior entre os elementos */
+}
+
+.right-values {
+    margin-left: 20px; /* Adiciona margem à esquerda para separar os lados esquerdo e direito */
+}
+
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.auto-resize {
+    overflow-y: hidden; /* Oculta a barra de rolagem vertical */
+    resize: none; /* Impede o redimensionamento manual */
+    height: 150px; /* Ajuste o valor conforme necessário */
+}
+
+/* Estilo aprimorado para o botão "Enviar" */
+button {
+    padding: 12px 40px; /* Largura aumentada */
+    background-color: #ff6347;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Caveat', cursive; /* Utiliza a outra fonte */
+    font-size: 1.4rem; /* Ajusta o tamanho da fonte */
+    transition: background-color 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    outline: none;
+    display: block; /* Torna o botão um elemento de bloco para poder aplicar a margem automática */
+    margin: 0 auto; /* Centraliza o botão com margens automáticas */
+}
+
+button:hover {
+    background-color: #cc4b34;
+}
+
+/* Efeito de sombra sutil no botão */
+button:active {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3) inset;
+}
+
+
+/* Adicione essas linhas ao seu CSS para estilizar os dropdowns */
+
+/* Estilizações gerais para o seletor de dropdown */
+select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+}
+
+/* Estilo quando o dropdown está focado */
+select:focus {
+    outline: none;
+    border-color: #3498db; /* Cor ao focar */
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5); /* Sombra suave ao focar */
+}
+
+/* Estilo para o ícone do dropdown */
+select::-ms-expand {
+    display: none; /* Remove o ícone padrão do IE/Edge */
+}
+
+/* Adiciona uma seta personalizada para o seletor de dropdown */
+select:before {
+    content: '\25BC'; /* Caracter da seta para baixo */
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #555;
+    pointer-events: none;
+}
+
+/* Estilo para as opções do dropdown */
+select option {
+    background-color: #fff;
+    color: #333;
+}
+
+/* Estilo para o dropdown quando passa o mouse sobre as opções */
+select:hover option {
+    background-color: #3498db; /* Cor de destaque ao passar o mouse */
+    color: #fff;
+}
+
+/* Estilo para o dropdown quando está aberto */
+select:active,
+select:checked {
+    border-color: #3498db; /* Cor quando o dropdown está aberto ou uma opção está selecionada */
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5); /* Sombra suave quando o dropdown está aberto ou uma opção está selecionada */
+}
+
+
+@media screen and (max-width: 600px) {
+    .info-container,
+    .values-attributes {
+        flex-direction: column; /* Altera a direção do flex container para coluna */
+    }
+
+    .info-container,
+    .info-inputs,
+    .personal-info {
+        margin: 0; /* Remove as margens nas seções "Informações" e "Personal Info" */
+    }
+
+    .info-inputs input,
+    .personal-info input {
+        width: 100%; /* Define a largura para 100% para ocupar toda a largura do contêiner */
+    }
+
+    .right-values {
+        margin-left: 0; /* Remove a margem à esquerda nos elementos internos de valores */
+    }
+}
