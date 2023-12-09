@@ -205,39 +205,40 @@
                     var container = document.getElementById('profile-picture-container');
                     var label = container.querySelector('.profile-picture-upload-label');
                     var span = label.querySelector('span');
-
+            
                     var file = input.files[0];
-
+            
                     if (file) {
                         var reader = new FileReader();
-
+            
                         reader.onload = function (e) {
-                            var img = document.createElement('img');
+                            var img = document.getElementById('profile-picture-preview');
                             img.src = e.target.result;
-
+            
                             img.onload = function () {
                                 // Cria um canvas para converter a imagem em Blob
                                 var canvas = document.createElement('canvas');
                                 canvas.width = img.width;
                                 canvas.height = img.height;
-
+            
                                 var ctx = canvas.getContext('2d');
                                 ctx.drawImage(img, 0, 0, img.width, img.height);
-
+            
                                 canvas.toBlob(function (blob) {
                                     resolve(blob);
                                 }, 'image/png');
                             };
                         };
-
+            
                         reader.readAsDataURL(file);
-
+            
                         span.innerText = 'Trocar Foto';
                     } else {
                         reject(new Error('Nenhuma imagem selecionada'));
                     }
                 });
             }
+
 
             /* adicao e subtracao de numbers*/
             function calcular(idCampo) {
@@ -300,6 +301,19 @@
                     var idadeInput = document.querySelector('input[name="idade"]');
                     var jogadorInput = document.querySelector('input[name="jogador"]');
                     var imagemInput = document.getElementById('profile-picture-input');
+
+                    // Ouvinte de eventos para a alteração da entrada de imagem
+                    var imagemInput = document.getElementById('profile-picture-input');
+
+                    // Ouvinte de eventos para a alteração da entrada de imagem
+                    imagemInput.addEventListener('change', function () {
+                        displayImage(this).then(blob => {
+                            // Manipule o Blob resolvido, se necessário
+                        }).catch(error => {
+                            console.error(error.message);
+                        });
+                    });
+
 
                     // valores
                     var staminaInput = document.getElementById('stamina');
