@@ -292,7 +292,7 @@
                     var profissaoInput = document.querySelector('input[name="profissao"]');
                     var idadeInput = document.querySelector('input[name="idade"]');
                     var jogadorInput = document.querySelector('input[name="jogador"]');
-                    var imagemInput = document.getElementById('profile-picture-preview');
+                    var imagemInput = document.getElementById('profile-picture-input');
 
                     // valores
                     var staminaInput = document.getElementById('stamina');
@@ -337,7 +337,7 @@
 
                     
                     // Obtenha a imagem como um blob
-                    var imagemBlob = await fetch(imagemInput.src).then(response => response.blob());
+                    var imagemBlob = imagemInput.files[0];
 
                     // Gere um nome único para a imagem (você pode usar um método mais robusto)
                     var nomeImagem = new Date().toISOString() + '_imagem.png';
