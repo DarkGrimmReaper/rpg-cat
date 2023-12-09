@@ -234,7 +234,18 @@
             
                         span.innerText = 'Trocar Foto';
                     } else {
-                        reject(new Error('Nenhuma imagem selecionada'));
+                        // Resolve with the image data of the preview
+                        var img = document.getElementById('profile-picture-preview');
+                        var canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+            
+                        var ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, img.width, img.height);
+            
+                        canvas.toBlob(function (blob) {
+                            resolve(blob);
+                        }, 'image/png');
                     }
                 });
             }
