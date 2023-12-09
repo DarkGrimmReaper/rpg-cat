@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../styles.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,7 +25,7 @@
                     <label>Jogador: <input type="text" name="jogador"></label>
                 </div>
                 <div class="profile-picture-upload" id="profile-picture-container">
-                    <img id="profile-picture-preview" src="Tomie.png" alt="Selecione uma Imagem">
+                    <img id="profile-picture-preview" src="img/Tomie.png" alt="Selecione uma Imagem">
                     <input type="file" id="profile-picture-input" onchange="displayImage(this)" />
                     <label for="profile-picture-input" class="profile-picture-upload-label">
                         <span>Adicionar Foto</span>
@@ -201,36 +201,43 @@
 
             /* troca a imagem de exibição */
             function displayImage(input) {
-            var container = document.getElementById('profile-picture-container');
-            var label = container.querySelector('.profile-picture-upload-label');
-            var span = label.querySelector('span');
+                return new Promise((resolve, reject) => {
+                    var container = document.getElementById('profile-picture-container');
+                    var label = container.querySelector('.profile-picture-upload-label');
+                    var span = label.querySelector('span');
 
-            var file = input.files[0];
+                    var file = input.files[0];
 
-            if (file) {
-                var reader = new FileReader();
+                    if (file) {
+                        var reader = new FileReader();
 
-                reader.onload = function (e) {
-                    // Cria uma nova imagem e define o src para a imagem carregada
-                    var img = document.createElement('img');
-                    img.src = e.target.result;
+                        reader.onload = function (e) {
+                            var img = document.createElement('img');
+                            img.src = e.target.result;
 
-                    // Adiciona estilos à imagem
-                    img.style.width = '100%';
-                    img.style.height = '100%';
-                    img.style.objectFit = 'cover';
+                            img.onload = function () {
+                                // Cria um canvas para converter a imagem em Blob
+                                var canvas = document.createElement('canvas');
+                                canvas.width = img.width;
+                                canvas.height = img.height;
 
-                    // Limpa o conteúdo do contêiner e adiciona a imagem
-                    container.innerHTML = '';
-                    container.appendChild(img);
-                };
+                                var ctx = canvas.getContext('2d');
+                                ctx.drawImage(img, 0, 0, img.width, img.height);
 
-                reader.readAsDataURL(file);
+                                canvas.toBlob(function (blob) {
+                                    resolve(blob);
+                                }, 'image/png');
+                            };
+                        };
 
-                // Atualiza o texto do label
-                span.innerText = 'Trocar Foto';
+                        reader.readAsDataURL(file);
+
+                        span.innerText = 'Trocar Foto';
+                    } else {
+                        reject(new Error('Nenhuma imagem selecionada'));
+                    }
+                });
             }
-        }
 
             /* adicao e subtracao de numbers*/
             function calcular(idCampo) {
@@ -316,7 +323,7 @@
                     var aliadosTextarea = document.querySelector('textarea[name="aliados"]');
                     var lesoesTextarea = document.querySelector('textarea[name="lesoes"]');
 
-                    // Verifique se os elementos foram encontrados   
+                    // Verifique se os elementos foram encontrados  
                     if (!nomeInput || !profissaoInput || !idadeInput || !jogadorInput || !imagemInput || !staminaInput || !sanityInput || !historiaTextarea) {
                         console.error('Elementos do formulário não encontrados.');
                         return;
@@ -334,12 +341,11 @@
                     var inventario = inventarioTextarea.value;
                     var aliados = aliadosTextarea.value;
                     var lesoes = lesoesTextarea.value;
-
                     
-                    // Obtenha a imagem como um blob
-                    var imagemBlob = imagemInput.files[0];
+                    // Obtenha a imagem como um Blob usando a função displayImage
+                    var imagemBlob = await displayImage(imagemInput);
 
-                    // Gere um nome único para a imagem (você pode usar um método mais robusto)
+                    // Gere um nome único para a imagem
                     var nomeImagem = new Date().toISOString() + '_imagem.png';
 
                     // Referência ao storage do Firebase
