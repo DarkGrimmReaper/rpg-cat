@@ -292,7 +292,7 @@
                     var profissaoInput = document.querySelector('input[name="profissao"]');
                     var idadeInput = document.querySelector('input[name="idade"]');
                     var jogadorInput = document.querySelector('input[name="jogador"]');
-                    //var imagemInput = document.getElementById('profile-picture-preview');
+                    var imagemInput = document.getElementById('profile-picture-preview');
 
                     // valores
                     var staminaInput = document.getElementById('stamina');
@@ -316,8 +316,8 @@
                     var aliadosTextarea = document.querySelector('textarea[name="aliados"]');
                     var lesoesTextarea = document.querySelector('textarea[name="lesoes"]');
 
-                    // Verifique se os elementos foram encontrados   || !imagemInput
-                    if (!nomeInput || !profissaoInput || !idadeInput || !jogadorInput || !staminaInput || !sanityInput || !historiaTextarea) {
+                    // Verifique se os elementos foram encontrados   
+                    if (!nomeInput || !profissaoInput || !idadeInput || !jogadorInput || !imagemInput || !staminaInput || !sanityInput || !historiaTextarea) {
                         console.error('Elementos do formulário não encontrados.');
                         return;
                     }
@@ -335,7 +335,7 @@
                     var aliados = aliadosTextarea.value;
                     var lesoes = lesoesTextarea.value;
 
-                    /*
+                    
                     // Obtenha a imagem como um blob
                     var imagemBlob = await fetch(imagemInput.src).then(response => response.blob());
 
@@ -349,7 +349,7 @@
                     await uploadBytes(storageReference, imagemBlob);
 
                     // Obtenha a URL da imagem no Firebase Storage
-                    var imageUrl = await getDownloadURL(storageReference);*/
+                    var imageUrl = await getDownloadURL(storageReference);
 
                     // Salva os dados no Firebase, incluindo a URL da imagem
                     await push(databaseRef(database, 'personagens'), {
@@ -357,7 +357,7 @@
                         profissao: profissao,
                         idade: idade,
                         jogador: jogador,
-                        //imagemUrl: imageUrl,  // Adicione isso
+                        imagemUrl: imageUrl,  // Adicione isso
                         stamina: stamina,
                         sanity: sanity,
                         historia: historia,
