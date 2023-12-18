@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha de Maldição</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Lacquer&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Ficha de Maldição</h1>
+
+        <div class="section personal-info">
+            <div class="profile-picture-upload" id="curse-image-container">
+                <img src="ficha_4/img/Tomie.png" alt="Selecione uma Imagem">
+                <input type="file" id="curse-image" accept="image/*" onchange="displayImage(this)" />
+                <label for="curse-image" class="profile-picture-upload-label">
+                    <span>Adicionar Foto</span>
+                </label>
+            </div>
+            <div class="info-container">
+                <div class="info-inputs">
+                    <label for="curse-name">Nome: <input type="text" id="curse-name"></label>
+                    <label for="curse-type">Tipo:
+                        <select id="curse-type">
+                            <option value="maldição">Maldição</option>
+                            <option value="encanto">Encanto</option>
+                            <!-- Adicione mais opções conforme necessário -->
+                        </select>
+                    </label>
+                    <label for="curse-source">Fonte: <input type="text" id="curse-source"></label>
+                    <label for="curse-cure">Cura: <input type="text" id="curse-cure"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section effects">
+            <h2>EFEITO</h2>
+            <label for="curse-effects">Efeito: <textarea id="curse-effects" class="auto-resize" placeholder="Efeito da Maldição"></textarea></label>
+        </div>
+
+        <div class="section description">
+            <h2>DESCRIÇÃO</h2>
+            <label for="curse-description">Descrição: <textarea id="curse-description" class="auto-resize" placeholder="Descrição da Maldição"></textarea></label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section management">
+            <h2>GERENCIAMENTO</h2>
+            <button onclick="submitCurse()">Enviar</button>
+        </div>
+
+        <script type="module">
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+            import { getDatabase, ref as databaseRef, push, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+            import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+            // TODO: Add SDKs for Firebase products that you want to use
+            // https://firebase.google.com/docs/web/setup#available-libraries
+        
+            // Your web app's Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyD0SxSsAe2r2z2BIwgqSL-dLUZ68KT6J50",
+                authDomain: "catalogue-horror-57634.firebaseapp.com",
+                databaseURL: "https://catalogue-horror-57634-default-rtdb.firebaseio.com",
+                projectId: "catalogue-horror-57634",
+                storageBucket: "catalogue-horror-57634.appspot.com",
+                messagingSenderId: "247277750504",
+                appId: "1:247277750504:web:3ad98ef42ee72aebb0a15d"
+            };
+        
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+        
+            // Inicializar o Realtime Database e obter uma referência ao serviço
+            const database = getDatabase(app);
+        
+            // Inicializar o Storage e obter uma referência ao serviço
+            const storage = getStorage(app);
+        
+            function displayImage(input, containerId) {
+                return new Promise((resolve, reject) => {
+                    var container = document.getElementById(containerId);
+                    var label = container.querySelector('.profile-picture-upload-label');
+                    var span = label.querySelector('span');
+        
+                    var file = input.files[0];
+        
+                    if (file) {
+                        var reader = new FileReader();
+        
+                        reader.onload = function (e) {
+                            var imgPreview = container.querySelector('img');
+                            imgPreview.src = e.target.result;
+        
+                            imgPreview.onload = function () {
+                                // Cria um canvas para converter a imagem em Blob
+                                var canvas = document.createElement('canvas');
+                                canvas.width = imgPreview.width;
+                                canvas.height = imgPreview.height;
+        
+                                var ctx = canvas.getContext('2d');
+                                ctx.drawImage(imgPreview, 0, 0, imgPreview.width, imgPreview.height);
+        
+                                canvas.toBlob(function (blob) {
+                                    resolve(blob);
+                                }, 'image/png');
+                            };
+                        };
+        
+                        reader.readAsDataURL(file);
+        
+                        span.innerText = 'Trocar Foto';
+                    } else {
+                        // Resolve com os dados da imagem de visualização
+                        var imgPreview = container.querySelector('img');
+        
+                        if (!imgPreview || !imgPreview.complete || typeof imgPreview.naturalWidth === "undefined" || imgPreview.naturalWidth === 0) {
+                            reject(new Error('A imagem não foi completamente carregada.'));
+                            return;
+                        }
+        
+                        var canvas = document.createElement('canvas');
+                        canvas.width = imgPreview.width;
+                        canvas.height = imgPreview.height;
+        
+                        var ctx = canvas.getContext('2d');
+                        ctx.drawImage(imgPreview, 0, 0, imgPreview.width, imgPreview.height);
+        
+                        canvas.toBlob(function (blob) {
+                            resolve(blob);
+                        }, 'image/png');
+                    }
+                });
+            }
+        
+            window.submitCurse = async function () {
+                try {
+                    // Obtenha os valores dos campos do formulário da maldição
+                    var curseNameInput = document.getElementById('curse-name');
+                    var curseTypeInput = document.getElementById('curse-type');
+                    var curseSourceInput = document.getElementById('curse-source');
+                    var curseCureInput = document.getElementById('curse-cure');
+                    var curseEffectsTextarea = document.getElementById('curse-effects');
+                    var curseDescriptionTextarea = document.getElementById('curse-description');
+        
+                    // Obtenha a imagem da maldição como Blob usando a função displayImage
+                    const curseImageInput = document.getElementById('curse-image');
+                    const curseImageBlob = await displayImage(curseImageInput, 'curse-image-container');
+        
+                    // Gere um nome único para a imagem da maldição
+                    const curseImageName = new Date().toISOString() + '_curse_image.png';
+        
+                    // Referência ao storage do Firebase para a imagem da maldição
+                    const curseImageStorageRef = storageRef(storage, 'curse_images/' + curseImageName);
+        
+                    // Faça o upload da imagem da maldição para o Firebase Storage
+                    await uploadBytes(curseImageStorageRef, curseImageBlob);
+        
+                    // Obtenha a URL da imagem da maldição no Firebase Storage
+                    const curseImageUrl = await getDownloadURL(curseImageStorageRef);
+        
+                    // Verifique se os elementos foram encontrados
+                    if (!curseNameInput || !curseTypeInput || !curseSourceInput || !curseCureInput || !curseEffectsTextarea || !curseDescriptionTextarea) {
+                        console.error('Elementos do formulário da maldição não encontrados.');
+                        return;
+                    }
+        
+                    var curseName = curseNameInput.value;
+                    var curseType = curseTypeInput.value;
+                    var curseSource = curseSourceInput.value;
+                    var curseCure = curseCureInput.value;
+                    var curseEffects = curseEffectsTextarea.value;
+                    var curseDescription = curseDescriptionTextarea.value;
+        
+                    // Salva os dados da maldição no Firebase
+                    await push(databaseRef(database, 'maldicoes'), {
+                        imagemUrl: curseImageUrl,
+                        nome: curseName,
+                        tipo: curseType,
+                        fonte: curseSource,
+                        cura: curseCure,
+                        efeito: curseEffects,
+                        descricao: curseDescription,
+                    });
+        
+                    console.log('Maldição salva com sucesso!');
+                } catch (error) {
+                    console.error('Erro ao salvar a maldição:', error.message);
+                }
+            };
+        </script>        
+    </div>
+
+</body>
+</html>
