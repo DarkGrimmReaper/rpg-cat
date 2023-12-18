@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha de Arma</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        .profile-picture-upload {
+            text-align: center;
+            margin: 0 auto;
+        }
+    </style>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Lacquer&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Ficha de Arma</h1>
+
+        <div class="section personal-info">
+            <div class="profile-picture-upload" id="profile-picture-container">
+                <img id="weapon-image-preview" src="ficha_4/img/Tomie.png" alt="Selecione uma Imagem">
+                <input type="file" id="weapon-image" accept="image/*" onchange="displayImage(this)" />
+                <label for="weapon-image" class="profile-picture-upload-label">
+                    <span>Adicionar Foto</span>
+                </label>
+            </div>
+            <div class="info-inputs">
+                <label for="weapon-name">Nome: <input type="text" id="weapon-name"></label>
+                <label for="damage-type">Tipo de Dano: 
+                    <select id="damage-type">
+                        <option value="corte">Corte</option>
+                        <option value="contusao">Contusão</option>
+                        <option value="perfuracao">Perfuração</option>
+                    </select>
+                </label>
+                <label for="category">Categoria: 
+                    <select id="category">
+                        <option value="corpo-a-corpo">Corpo a Corpo</option>
+                        <option value="arremesso">Arremesso</option>
+                        <option value="fogo">Fogo</option>
+                    </select>
+                </label>
+                <label for="grip">Empunhadura: 
+                    <select id="grip">
+                        <option value="simples">Simples</option>
+                        <option value="dupla">Dupla</option>
+                        <option value="mista">Mista</option>
+                    </select>
+                </label>
+                <label for="attribute">Atributo: <input type="text" id="attribute"></label>
+                <label for="damage">Dano: <input type="number" id="damage"></label>
+                <label for="throw-damage">Dano de Arremesso: <input type="number" id="throw-damage"></label>
+                <label for="shoot-damage">Dano de Tiro: <input type="number" id="shoot-damage"></label>
+                <label for="buy-value">Valor (Compra): <input type="number" id="buy-value"></label>
+                <label for="sell-value">Valor (Venda): <input type="number" id="sell-value"></label>
+                <label for="quality">Estado (Qualidade): <input type="text" id="quality"></label>
+                <label for="curse">Status (Maldição): <input type="text" id="curse"></label>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section history">
+            <h2>DESCRIÇÃO</h2>
+            <label for="weapon-description">Descrição: <textarea id="weapon-description" class="auto-resize" placeholder="Descrição da arma"></textarea></label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section management">
+            <h2>GERENCIAMENTO</h2>
+            <button onclick="submitWeapon()">Enviar</button>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref as databaseRef, push, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+    
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0SxSsAe2r2z2BIwgqSL-dLUZ68KT6J50",
+            authDomain: "catalogue-horror-57634.firebaseapp.com",
+            databaseURL: "https://catalogue-horror-57634-default-rtdb.firebaseio.com",
+            projectId: "catalogue-horror-57634",
+            storageBucket: "catalogue-horror-57634.appspot.com",
+            messagingSenderId: "247277750504",
+            appId: "1:247277750504:web:3ad98ef42ee72aebb0a15d"
+        };
+    
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+    
+        // Inicializar o Realtime Database e obter uma referência ao serviço
+        const database = getDatabase(app);
+    
+        // Inicializar o Storage e obter uma referência ao serviço
+        const storage = getStorage(app);
+    
+        function displayImage(input) {
+            return new Promise((resolve, reject) => {
+                var container = document.getElementById('profile-picture-container');
+                var label = container.querySelector('.profile-picture-upload-label');
+                var span = label.querySelector('span');
+    
+                var file = input.files[0];
+    
+                if (file) {
+                    var reader = new FileReader();
+    
+                    reader.onload = function (e) {
+                        var imgPreview = document.getElementById('weapon-image-preview');
+                        imgPreview.src = e.target.result;
+    
+                        imgPreview.onload = function () {
+                            // Cria um canvas para converter a imagem em Blob
+                            var canvas = document.createElement('canvas');
+                            canvas.width = imgPreview.width;
+                            canvas.height = imgPreview.height;
+    
+                            var ctx = canvas.getContext('2d');
+                            ctx.drawImage(imgPreview, 0, 0, imgPreview.width, imgPreview.height);
+    
+                            canvas.toBlob(function (blob) {
+                                resolve(blob);
+                            }, 'image/png');
+                        };
+                    };
+    
+                    reader.readAsDataURL(file);
+    
+                    span.innerText = 'Trocar Foto';
+                } else {
+                    // Resolve com os dados da imagem de visualização
+                    var imgPreview = document.getElementById('weapon-image-preview');
+    
+                    if (!imgPreview || !imgPreview.complete || typeof imgPreview.naturalWidth === "undefined" || imgPreview.naturalWidth === 0) {
+                        reject(new Error('A imagem não foi completamente carregada.'));
+                        return;
+                    }
+    
+                    var canvas = document.createElement('canvas');
+                    canvas.width = imgPreview.width;
+                    canvas.height = imgPreview.height;
+    
+                    var ctx = canvas.getContext('2d');
+                    ctx.drawImage(imgPreview, 0, 0, imgPreview.width, imgPreview.height);
+    
+                    canvas.toBlob(function (blob) {
+                        resolve(blob);
+                    }, 'image/png');
+                }
+            });
+        }
+    
+        window.submitWeapon = async function () {
+            try {
+                // Obtenha os valores dos campos do formulário da arma
+                var weaponNameInput = document.getElementById('weapon-name');
+                var damageTypeInput = document.getElementById('damage-type');
+                var categoryInput = document.getElementById('category');
+                var gripInput = document.getElementById('grip');
+                var attributeInput = document.getElementById('attribute');
+                var damageInput = document.getElementById('damage');
+                var throwDamageInput = document.getElementById('throw-damage');
+                var shootDamageInput = document.getElementById('shoot-damage');
+                var buyValueInput = document.getElementById('buy-value');
+                var sellValueInput = document.getElementById('sell-value');
+                var qualityInput = document.getElementById('quality');
+                var curseInput = document.getElementById('curse');
+                var weaponDescriptionTextarea = document.getElementById('weapon-description');
+    
+                // Obtenha a imagem da arma como Blob usando a função displayImage
+                const weaponImageInput = document.getElementById('weapon-image');
+                const weaponImageBlob = await displayImage(weaponImageInput);
+    
+                // Gere um nome único para a imagem da arma
+                const weaponImageName = new Date().toISOString() + '_weapon_image.png';
+    
+                // Referência ao storage do Firebase para a imagem da arma
+                const weaponImageStorageRef = storageRef(storage, 'weapon_images/' + weaponImageName);
+    
+                // Faça o upload da imagem da arma para o Firebase Storage
+                await uploadBytes(weaponImageStorageRef, weaponImageBlob);
+    
+                // Obtenha a URL da imagem da arma no Firebase Storage
+                const weaponImageUrl = await getDownloadURL(weaponImageStorageRef);
+    
+                // Verifique se os elementos foram encontrados
+                if (!weaponImageInput || !weaponNameInput || !damageTypeInput || !categoryInput || !gripInput || !attributeInput || !damageInput || !throwDamageInput || !shootDamageInput || !buyValueInput || !sellValueInput || !qualityInput || !curseInput || !weaponDescriptionTextarea) {
+                    console.error('Elementos do formulário da arma não encontrados.');
+                    return;
+                }
+    
+                var weaponName = weaponNameInput.value;
+                var damageType = damageTypeInput.value;
+                var category = categoryInput.value;
+                var grip = gripInput.value;
+                var attribute = attributeInput.value;
+                var damage = damageInput.value;
+                var throwDamage = throwDamageInput.value;
+                var shootDamage = shootDamageInput.value;
+                var buyValue = buyValueInput.value;
+                var sellValue = sellValueInput.value;
+                var quality = qualityInput.value;
+                var curse = curseInput.value;
+                var weaponDescription = weaponDescriptionTextarea.value;
+    
+                // Salva os dados da arma no Firebase
+                await push(databaseRef(database, 'armas'), {
+                    imagemUrl: weaponImageUrl,
+                    nome: weaponName,
+                    tipoDeDano: damageType,
+                    categoria: category,
+                    empunhadura: grip,
+                    atributo: attribute,
+                    dano: damage,
+                    danoDeArremesso: throwDamage,
+                    danoDeTiro: shootDamage,
+                    valorCompra: buyValue,
+                    valorVenda: sellValue,
+                    qualidade: quality,
+                    statusMaldicao: curse,
+                    descricao: weaponDescription,
+                });
+    
+                console.log('Arma salva com sucesso!');
+            } catch (error) {
+                console.error('Erro ao salvar a arma:', error.message);
+            }
+        };
+    </script>
+    
+
+</body>
+</html>

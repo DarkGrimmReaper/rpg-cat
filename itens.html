@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha de Item</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Lacquer&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Ficha de Item</h1>
+
+        <div class="section personal-info">
+            <div class="profile-picture-upload" id="item-image-container">
+                <img src="ficha_4/img/Tomie.png" alt="Selecione uma Imagem">
+                <input type="file" id="item-image" accept="image/*" onchange="displayImage(this)" />
+                <label for="item-image" class="profile-picture-upload-label">
+                    <span>Adicionar Foto</span>
+                </label>
+            </div>
+            <div class="info-container">
+                <div class="info-inputs">
+                    <label for="item-name">Nome: <input type="text" id="item-name"></label>
+                    <label for="item-type">Tipo: <input type="text" id="item-type"></label>
+                    <label for="item-features">Características: <input type="text" id="item-features"></label>
+                </div>
+                <div class="info-inputs">
+                    <label for="item-damage">Dano: <input type="number" id="item-damage"></label>
+                    <label for="item-throw-damage">Dano de Arremesso: <input type="number" id="item-throw-damage"></label>
+                    <label for="item-purchase-value">Valor (Compra): <input type="number" id="item-purchase-value"></label>
+                </div>
+                <div class="info-inputs">
+                    <label for="item-sale-value">Valor (Venda): <input type="number" id="item-sale-value"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section effects">
+            <h2>EFEITO</h2>
+            <label for="item-effects">Efeito: <textarea id="item-effects" class="auto-resize" placeholder="Efeito do item"></textarea></label>
+        </div>
+
+        <div class="section description">
+            <h2>DESCRIÇÃO</h2>
+            <label for="item-description">Descrição: <textarea id="item-description" class="auto-resize" placeholder="Descrição do item"></textarea></label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section management">
+            <h2>GERENCIAMENTO</h2>
+            <button onclick="submitItem()">Enviar</button>
+        </div>
+
+        <script type="module">
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+            import { getDatabase, ref as databaseRef, push, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+            import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+            // TODO: Add SDKs for Firebase products that you want to use
+            // https://firebase.google.com/docs/web/setup#available-libraries
+        
+            // Your web app's Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyD0SxSsAe2r2z2BIwgqSL-dLUZ68KT6J50",
+                authDomain: "catalogue-horror-57634.firebaseapp.com",
+                databaseURL: "https://catalogue-horror-57634-default-rtdb.firebaseio.com",
+                projectId: "catalogue-horror-57634",
+                storageBucket: "catalogue-horror-57634.appspot.com",
+                messagingSenderId: "247277750504",
+                appId: "1:247277750504:web:3ad98ef42ee72aebb0a15d"
+            };
+        
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+        
+            // Inicializar o Realtime Database e obter uma referência ao serviço
+            const database = getDatabase(app);
+        
+            // Inicializar o Storage e obter uma referência ao serviço
+            const storage = getStorage(app);
+        
+            function displayImage(input, containerId) {
+                return new Promise((resolve, reject) => {
+                    var container = document.getElementById(containerId);
+                    var label = container.querySelector('.profile-picture-upload-label');
+                    var span = label.querySelector('span');
+        
+                    var file = input.files[0];
+        
+                    if (file) {
+                        var reader = new FileReader();
+        
+                        reader.onload = function (e) {
+                            var imgPreview = container.querySelector('img');
+                            imgPreview.src = e.target.result;
+        
+                            imgPreview.onload = function () {
+                                // Cria um canvas para converter a imagem em Blob
+                                var canvas = document.createElement('canvas');
+                                canvas.width = imgPreview.width;
+                                canvas.height = imgPreview.height;
+        
+                                var ctx = canvas.getContext('2d');
+                                ctx.drawImage(imgPreview, 0, 0, imgPreview.width, imgPreview.height);
+        
+                                canvas.toBlob(function (blob) {
+                                    resolve(blob);
+                                }, 'image/png');
+                            };
+                        };
+        
+                        reader.readAsDataURL(file);
+        
+                        span.innerText = 'Trocar Foto';
+                    } else {
+                        // Resolve com os dados da imagem de visualização
+                        var imgPreview = container.querySelector('img');
+        
+                        if (!imgPreview || !imgPreview.complete || typeof imgPreview.naturalWidth === "undefined" || imgPreview.naturalWidth === 0) {
+                            reject(new Error('A imagem não foi completamente carregada.'));
+                            return;
+                        }
+        
+                        var canvas = document.createElement('canvas');
+                        canvas.width = imgPreview.width;
+                        canvas.height = imgPreview.height;
+        
+                        var ctx = canvas.getContext('2d');
+                        ctx.drawImage(imgPreview, 0, 0, imgPreview.width, imgPreview.height);
+        
+                        canvas.toBlob(function (blob) {
+                            resolve(blob);
+                        }, 'image/png');
+                    }
+                });
+            }
+        
+            window.submitItem = async function () {
+                try {
+                    // Obtenha os valores dos campos do formulário do item
+                    var itemNameInput = document.getElementById('item-name');
+                    var itemTypeInput = document.getElementById('item-type');
+                    var itemFeaturesInput = document.getElementById('item-features');
+                    var itemDamageInput = document.getElementById('item-damage');
+                    var itemThrowDamageInput = document.getElementById('item-throw-damage');
+                    var itemPurchaseValueInput = document.getElementById('item-purchase-value');
+                    var itemSaleValueInput = document.getElementById('item-sale-value');
+                    var itemEffectsTextarea = document.getElementById('item-effects');
+                    var itemDescriptionTextarea = document.getElementById('item-description');
+        
+                    // Obtenha a imagem do item como Blob usando a função displayImage
+                    const itemImageInput = document.getElementById('item-image');
+                    const itemImageBlob = await displayImage(itemImageInput, 'item-image-container');
+        
+                    // Gere um nome único para a imagem do item
+                    const itemImageName = new Date().toISOString() + '_item_image.png';
+        
+                    // Referência ao storage do Firebase para a imagem do item
+                    const itemImageStorageRef = storageRef(storage, 'item_images/' + itemImageName);
+        
+                    // Faça o upload da imagem do item para o Firebase Storage
+                    await uploadBytes(itemImageStorageRef, itemImageBlob);
+        
+                    // Obtenha a URL da imagem do item no Firebase Storage
+                    const itemImageUrl = await getDownloadURL(itemImageStorageRef);
+        
+                    // Verifique se os elementos foram encontrados
+                    if (!itemNameInput || !itemTypeInput || !itemFeaturesInput || !itemDamageInput || !itemThrowDamageInput || !itemPurchaseValueInput || !itemSaleValueInput || !itemEffectsTextarea || !itemDescriptionTextarea) {
+                        console.error('Elementos do formulário do item não encontrados.');
+                        return;
+                    }
+        
+                    var itemName = itemNameInput.value;
+                    var itemType = itemTypeInput.value;
+                    var itemFeatures = itemFeaturesInput.value;
+                    var itemDamage = itemDamageInput.value;
+                    var itemThrowDamage = itemThrowDamageInput.value;
+                    var itemPurchaseValue = itemPurchaseValueInput.value;
+                    var itemSaleValue = itemSaleValueInput.value;
+                    var itemEffects = itemEffectsTextarea.value;
+                    var itemDescription = itemDescriptionTextarea.value;
+        
+                    // Salva os dados do item no Firebase
+                    await push(databaseRef(database, 'itens'), {
+                        imagemUrl: itemImageUrl,
+                        nome: itemName,
+                        tipo: itemType,
+                        caracteristicas: itemFeatures,
+                        dano: itemDamage,
+                        danoDeArremesso: itemThrowDamage,
+                        valorCompra: itemPurchaseValue,
+                        valorVenda: itemSaleValue,
+                        efeito: itemEffects,
+                        descricao: itemDescription,
+                    });
+        
+                    console.log('Item salvo com sucesso!');
+                } catch (error) {
+                    console.error('Erro ao salvar o item:', error.message);
+                }
+            };
+        </script>
+        
+    </div>
+
+</body>
+</html>

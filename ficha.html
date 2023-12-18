@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Lacquer&display=swap" rel="stylesheet">
+
+    <title>Ficha de RPG - Catalogue Horror</title>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="section personal-info">
+            <h1>Catalogue Horror</h1>
+            <div class="info-container">
+                <div class="info-inputs">
+                    <label>Nome: <input type="text" name="nome"></label>
+                    <label>Ocupação: <input type="text" name="profissao"></label>
+                    <label>Idade: <input type="number" name="idade"></label>
+                    <label>Jogador: <input type="text" name="jogador"></label>
+                </div>
+                <div class="profile-picture-upload" id="profile-picture-container">
+                    <img id="profile-picture-preview" src="Tomie.png" alt="Selecione uma Imagem">
+                    <input type="file" id="profile-picture-input" onchange="displayImage(this)" />
+                    <label for="profile-picture-input" class="profile-picture-upload-label">
+                        <span>Adicionar Foto</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- ... Seu HTML anterior ... -->
+
+        <div class="divider"></div>
+
+        <!-- Seção de Valores e Atributos -->
+        <div class="section values-attributes">
+            <div class="left-values">
+                <label>Stamina/Hp: <input type="text" id="stamina" value="20" onblur="calcular('stamina')"></label>
+                <label>Sanity: <input type="text" id="sanity" value="20" onblur="calcular('sanity')"></label>
+            </div>
+            <div class="right-values">
+                <label>Survive:</label>
+                <div class="checkbox-group no-interaction">
+                    <h4>Player</h4>
+                    <label><input type="checkbox" name="sobreviver_player" value="player" class="no-interaction"></label>
+                    <label><input type="checkbox" name="sobreviver_player" value="player" class="no-interaction"></label>
+                    <label><input type="checkbox" name="sobreviver_player" value="player" class="no-interaction"></label>
+                </div>
+                <div class="checkbox-group no-interaction">
+                    <h4>Morte</h4>
+                    <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
+                    <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
+                    <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
+                </div>
+                <label>Jogos: <input type="number" value="0"></label>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ... Restante do seu HTML ... -->
+        <div class="section history">
+            <h2>HISTORIA</h2>
+            <label>Historia: <textarea class="auto-resize" name="historia"></textarea></label>
+        </div>         
+
+        <div class="divider"></div>
+
+        <div class="section attributes">
+            <h2>ATRIBUTOS</h2>
+            <label>Força:</label>
+            <div class="checkbox-group" id="forca-group">
+                <label><input type="checkbox" name="forca" value="1" checked onclick="return false;"></label>
+                <label><input type="checkbox" name="forca" value="1"></label>
+                <label><input type="checkbox" name="forca" value="1"></label>
+                <label><input type="checkbox" name="forca" value="1"></label>
+                <label><input type="checkbox" name="forca" value="1"></label>
+                <span class="counter">1</span>
+            </div>
+
+            <label>Destreza:</label>
+            <div class="checkbox-group" id="destreza-group">
+                <label><input type="checkbox" name="destreza" value="1" checked onclick="return false;"></label>
+                <label><input type="checkbox" name="destreza" value="1"></label>
+                <label><input type="checkbox" name="destreza" value="1"></label>
+                <label><input type="checkbox" name="destreza" value="1"></label>
+                <label><input type="checkbox" name="destreza" value="1"></label>
+                <span class="counter">1</span>
+            </div>
+
+            <label>Percepção:</label>
+            <div class="checkbox-group" id="percepcao-group">
+                <label><input type="checkbox" name="percepcao" value="1" checked onclick="return false;"></label>
+                <label><input type="checkbox" name="percepcao" value="1"></label>
+                <label><input type="checkbox" name="percepcao" value="1"></label>
+                <label><input type="checkbox" name="percepcao" value="1"></label>
+                <label><input type="checkbox" name="percepcao" value="1"></label>
+                <span class="counter">1</span>
+            </div>
+
+            <label>Conhecimento:</label>
+            <div class="checkbox-group" id="conhecimento-group">
+                <label><input type="checkbox" name="conhecimento" value="1" checked onclick="return false;"></label>
+                <label><input type="checkbox" name="conhecimento" value="1"></label>
+                <label><input type="checkbox" name="conhecimento" value="1"></label>
+                <label><input type="checkbox" name="conhecimento" value="1"></label>
+                <label><input type="checkbox" name="conhecimento" value="1"></label>
+                <span class="counter">1</span>
+            </div>
+
+            <label>Carisma:</label>
+            <div class="checkbox-group" id="carisma-group">
+                <label><input type="checkbox" name="carisma" value="1" checked onclick="return false;"></label>
+                <label><input type="checkbox" name="carisma" value="1"></label>
+                <label><input type="checkbox" name="carisma" value="1"></label>
+                <label><input type="checkbox" name="carisma" value="1"></label>
+                <label><input type="checkbox" name="carisma" value="1"></label>
+                <span class="counter">1</span>
+            </div>
+
+            <label>Fundos:</label>
+            <div class="checkbox-group" id="fundos-group">
+                <label><input type="checkbox" name="fundos" value="1" checked onclick="return false;"></label>
+                <label><input type="checkbox" name="fundos" value="1"></label>
+                <label><input type="checkbox" name="fundos" value="1"></label>
+                <label><input type="checkbox" name="fundos" value="1"></label>
+                <label><input type="checkbox" name="fundos" value="1"></label>
+                <span class="counter">1</span>
+            </div>
+
+            <div class="total-counter" style="text-align: right;">Total Geral: <span id="total">0</span></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section management">
+            <h2>GERENCIAMENTO</h2>
+            <label>Status: <textarea class="auto-resize" name="status"></textarea></label>
+            <label>Magias e Rituais: <textarea class="auto-resize" name="magia"></textarea></label>
+            <label>Inventário e Equipamento: <textarea class="auto-resize" name="inventario"></textarea></label>
+            <label>Aliados e Conecções: <textarea class="auto-resize" name="aliados"></textarea></label>
+            <label>Cicatrizes e Amputações: <textarea class="auto-resize" name="lesoes"></textarea></label>
+
+            <button type="button" onclick="handleFormSubmit(event)">Enviar</button>
+        </div>
+
+        <script>
+            var groups = document.querySelectorAll('.checkbox-group:not(.no-interaction)');
+            var totalCounter = document.getElementById('total');
+
+            /* contador */
+            groups.forEach(function(group) {
+                var checkboxes = group.querySelectorAll('input[type="checkbox"]');
+                var counter = group.querySelector('.counter');
+
+                checkboxes.forEach(function(checkbox, index) {
+                    checkbox.addEventListener('change', function() {
+                        if (this.checked) {
+                            for (var i = 0; i < index; i++) {
+                                checkboxes[i].checked = true;
+                            }
+                            for (var j = index + 1; j < checkboxes.length; j++) {
+                                checkboxes[j].checked = false;
+                            }
+                        }
+
+                        var totalSelecionado = Array.from(checkboxes)
+                            .filter(function(checkbox) {
+                                return checkbox.checked;
+                            })
+                            .reduce(function(acc, checkbox) {
+                                return acc + parseInt(checkbox.value);
+                            }, 0);
+
+                        counter.textContent = totalSelecionado;
+
+                        // Atualizar o total geral
+                        var totalGeral = Array.from(document.querySelectorAll('.counter'))
+                            .reduce(function(acc, counter) {
+                                return acc + parseInt(counter.textContent.replace('Total: ', ''));
+                            }, 0);
+
+                        // Subtrair 6 do total geral
+                        totalCounter.textContent = totalGeral - 6;
+
+                        // Adicionar a cor vermelha se o total geral for 13 ou maior
+                        if (totalGeral >= 13+6) {
+                            totalCounter.style.color = 'red';
+                        } else {
+                            totalCounter.style.color = ''; // redefinir para a cor padrão
+                        }
+                    });
+                });
+            });
+
+            // troca a imagem de exibição
+            function displayImage(input) {
+                return new Promise((resolve, reject) => {
+                    var container = document.getElementById('profile-picture-container');
+                    var label = container.querySelector('.profile-picture-upload-label');
+                    var span = label.querySelector('span');
+            
+                    var file = input.files[0];
+            
+                    if (file) {
+                        var reader = new FileReader();
+            
+                        reader.onload = function (e) {
+                            var img = document.getElementById('profile-picture-preview');
+                            img.src = e.target.result;
+            
+                            img.onload = function () {
+                                // Cria um canvas para converter a imagem em Blob
+                                var canvas = document.createElement('canvas');
+                                canvas.width = img.width;
+                                canvas.height = img.height;
+            
+                                var ctx = canvas.getContext('2d');
+                                ctx.drawImage(img, 0, 0, img.width, img.height);
+            
+                                canvas.toBlob(function (blob) {
+                                    resolve(blob);
+                                }, 'image/png');
+                            };
+                        };
+            
+                        reader.readAsDataURL(file);
+            
+                        span.innerText = 'Trocar Foto';
+                    } else {
+                        // Resolve with the image data of the preview
+                        var img = document.getElementById('profile-picture-preview');
+                        var canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+            
+                        var ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, img.width, img.height);
+            
+                        canvas.toBlob(function (blob) {
+                            resolve(blob);
+                        }, 'image/png');
+                    }
+                });
+            }
+
+
+
+            /* adicao e subtracao de numbers*/
+            function calcular(idCampo) {
+                var expressaoInput = document.getElementById(idCampo);
+                var expressao = expressaoInput.value;
+                var resultado = eval(expressao); // Use eval com cuidado, pode representar riscos de segurança
+                expressaoInput.value = resultado;
+            }
+
+            // Encontrar todos os elementos com a classe 'auto-resize'
+            var autoResizeTextareas = document.querySelectorAll('.auto-resize');
+
+            // Adicionar um ouvinte de evento de entrada a cada um
+            autoResizeTextareas.forEach(function(textarea) {
+                textarea.addEventListener('input', function() {
+                    // Ajustar a altura do textarea com base no conteúdo
+                    this.style.height = 'auto';
+                    this.style.height = (this.scrollHeight) + 'px';
+                });
+            });
+
+        </script>
+
+        <script type="module">
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+            import { getDatabase, ref as databaseRef, push, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+            import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
+            // TODO: Add SDKs for Firebase products that you want to use
+            // https://firebase.google.com/docs/web/setup#available-libraries
+          
+            // Your web app's Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyD0SxSsAe2r2z2BIwgqSL-dLUZ68KT6J50",
+                authDomain: "catalogue-horror-57634.firebaseapp.com",
+                projectId: "catalogue-horror-57634",
+                storageBucket: "catalogue-horror-57634.appspot.com",
+                messagingSenderId: "247277750504",
+                appId: "1:247277750504:web:3ad98ef42ee72aebb0a15d"
+            };
+          
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+
+            // Inicializar o Realtime Database e obter uma referência ao serviço
+            const database = getDatabase(app);
+
+            // Inicializar o Storage e obter uma referência ao serviço
+            const storage = getStorage(app);
+
+
+            window.handleFormSubmit = async function (event) {
+                try {
+                    event.preventDefault();
+
+                    // Obtenha os valores dos campos do formulário
+                    var nomeInput = document.querySelector('input[name="nome"]');
+                    var profissaoInput = document.querySelector('input[name="profissao"]');
+                    var idadeInput = document.querySelector('input[name="idade"]');
+                    var jogadorInput = document.querySelector('input[name="jogador"]');
+                    var imagemInput = document.getElementById('profile-picture-input');
+
+                    // Ouvinte de eventos para a alteração da entrada de imagem
+                    var imagemInput = document.getElementById('profile-picture-input');
+
+                    // Ouvinte de eventos para a alteração da entrada de imagem
+                    imagemInput.addEventListener('change', function () {
+                        displayImage(this).then(blob => {
+                            // Manipule o Blob resolvido, se necessário
+                        }).catch(error => {
+                            console.error(error.message);
+                        });
+                    });
+
+
+                    // valores
+                    var staminaInput = document.getElementById('stamina');
+                    var sanityInput = document.getElementById('sanity');
+
+                    // historia
+                    var historiaTextarea = document.querySelector('textarea[name="historia"]');
+
+                    // Obtenha os valores dos atributos
+                    var forca = calcularAtributo('forca');
+                    var destreza = calcularAtributo('destreza');
+                    var percepcao = calcularAtributo('percepcao');
+                    var conhecimento = calcularAtributo('conhecimento');
+                    var carisma = calcularAtributo('carisma');
+                    var fundos = calcularAtributo('fundos');
+
+                    //gerenciamento
+                    var statusTextarea = document.querySelector('textarea[name="status"]');
+                    var magiaTextarea = document.querySelector('textarea[name="magia"]');
+                    var inventarioTextarea = document.querySelector('textarea[name="inventario"]');
+                    var aliadosTextarea = document.querySelector('textarea[name="aliados"]');
+                    var lesoesTextarea = document.querySelector('textarea[name="lesoes"]');
+
+                    // Verifique se os elementos foram encontrados  
+                    if (!nomeInput || !profissaoInput || !idadeInput || !jogadorInput || !imagemInput || !staminaInput || !sanityInput || !historiaTextarea) {
+                        console.error('Elementos do formulário não encontrados.');
+                        return;
+                    }
+
+                    var nome = nomeInput.value;
+                    var profissao = profissaoInput.value;
+                    var idade = idadeInput.value;
+                    var jogador = jogadorInput.value;
+                    var stamina = staminaInput.value;
+                    var sanity = sanityInput.value;
+                    var historia = historiaTextarea.value;
+                    var status = statusTextarea.value;
+                    var magia = magiaTextarea.value;
+                    var inventario = inventarioTextarea.value;
+                    var aliados = aliadosTextarea.value;
+                    var lesoes = lesoesTextarea.value;
+                    
+                    // Obtenha a imagem como um Blob usando a função displayImage
+                    var imagemBlob = await displayImage(imagemInput);
+
+                    // Gere um nome único para a imagem
+                    var nomeImagem = new Date().toISOString() + '_imagem.png';
+
+                    // Referência ao storage do Firebase
+                    var storageReference = storageRef(storage, 'imagens/' + nomeImagem);
+
+                    // Faça o upload da imagem para o Firebase Storage
+                    await uploadBytes(storageReference, imagemBlob);
+
+                    // Obtenha a URL da imagem no Firebase Storage
+                    var imageUrl = await getDownloadURL(storageReference);
+
+                    // Salva os dados no Firebase, incluindo a URL da imagem
+                    await push(databaseRef(database, 'personagens'), {
+                        nome: nome,
+                        profissao: profissao,
+                        idade: idade,
+                        jogador: jogador,
+                        imagemUrl: imageUrl,  // Adicione isso
+                        stamina: stamina,
+                        sanity: sanity,
+                        historia: historia,
+                        forca: forca,
+                        destreza: destreza,
+                        percepcao: percepcao,
+                        conhecimento: conhecimento,
+                        carisma: carisma,
+                        fundos: fundos,
+                        status: status,
+                        magia: magia,
+                        inventario: inventario,
+                        aliados: aliados,
+                        lesoes: lesoes,
+                    });
+
+                    console.log('Personagem salvo com sucesso!');
+                } catch (error) {
+                    console.error('Erro ao salvar o personagem:', error.message);
+                }
+
+                // Função para calcular o valor total de um atributo
+                function calcularAtributo(idGrupo) {
+                    var checkboxes = document.querySelectorAll('#' + idGrupo + '-group input[type="checkbox"]');
+                    var totalSelecionado = Array.from(checkboxes)
+                        .filter(function(checkbox) {
+                            return checkbox.checked;
+                        })
+                        .reduce(function(acc, checkbox) {
+                            return acc + parseInt(checkbox.value);
+                        }, 0);
+
+                    return totalSelecionado;
+                }
+            };
+
+            
+          </script>
+
+<!-- ... Seu HTML anterior ... -->
+
+
+    </div>
+</body>
+</html>
