@@ -1,154 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../styles.css"> <!-- Mantenha esta linha para o mesmo estilo da página de cadastro -->
+    <title>Menu de Opções</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
 
-    <title>Ficha de RPG - Catalogue Horror - Exibir</title>
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: max-content; /* Largura do maior botão */
+            margin: 0 auto; /* Centraliza o contêiner na página */
+        }
+
+        button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+            width: 100%; /* Preenche a largura do contêiner */
+            box-sizing: border-box; /* Inclui padding e borda na largura total */
+        }
+
+        #vazio {
+            background-color: gray;
+        }
+    </style>
 </head>
-
 <body>
 
-    <div class="container">
-
-        <div class="section personal-info" id="character-info-container">
-            <!-- As informações do personagem serão exibidas aqui dinamicamente -->
-        </div>
-
-        <div class="divider"></div>
-        
-        <div class="section values-attributes">
-            <div class="left-values">
-                <label>Stamina/Hp: <span id="stamina">20</span></label>
-                <label>Sanity: <span id="sanity">20</span></label>
-            </div>
-            <div class="right-values">
-                <label>Survive:</label>
-                <div class="checkbox-group no-interaction">
-                    <h4>Player</h4>
-                    <label><input type="checkbox" name="sobreviver_player" value="player" class="no-interaction"></label>
-                    <label><input type="checkbox" name="sobreviver_player" value="player" class="no-interaction"></label>
-                    <label><input type="checkbox" name="sobreviver_player" value="player" class="no-interaction"></label>
-                </div>
-                <div class="checkbox-group no-interaction">
-                    <h4>Morte</h4>
-                    <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
-                    <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
-                    <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
-                </div>
-                <label>Jogos: <input type="number" value="0"></label>
-            </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="section history">
-            <h2>HISTORIA</h2>
-            <p id="historia">História do personagem será exibida aqui.</p>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="section attributes">
-            <h2>ATRIBUTOS</h2>
-            <label>Força:</label>
-            <div class="checkbox-group" id="forca-group">
-                <!-- Conteúdo dinâmico será adicionado aqui -->
-            </div>
-
-            <!-- Adicione os campos de outros atributos aqui -->
-            
-            <div class="total-counter" style="text-align: right;">Total Geral: <span id="total">0</span></div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="section management">
-            <h2>GERENCIAMENTO</h2>
-            <label>Status: <p id="status">Status do personagem será exibido aqui.</p></label>
-            <label>Magias e Rituais: <p id="magia">Magias e rituais do personagem serão exibidos aqui.</p></label>
-            <label>Inventário e Equipamento: <p id="inventario">Inventário e equipamento do personagem serão exibidos aqui.</p></label>
-            <label>Aliados e Conecções: <p id="aliados">Aliados e conexões do personagem serão exibidos aqui.</p></label>
-            <label>Cicatrizes e Amputações: <p id="lesoes">Cicatrizes e amputações do personagem serão exibidas aqui.</p></label>
-
-            <button type="button" onclick="handleFormSubmit(event)">Enviar</button>
-        </div>
-
+    <div class="button-container">
+        <button onclick="redirectTo('tesla')">Tesla</button>
+        <button onclick="redirectTo('aoi')">Aoi</button>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref as databaseRef, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-        // Sua configuração do Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyD0SxSsAe2r2z2BIwgqSL-dLUZ68KT6J50",
-            authDomain: "catalogue-horror-57634.firebaseapp.com",
-            databaseURL: "https://catalogue-horror-57634-default-rtdb.firebaseio.com",
-            projectId: "catalogue-horror-57634",
-            storageBucket: "catalogue-horror-57634.appspot.com",
-            messagingSenderId: "247277750504",
-            appId: "1:247277750504:web:3ad98ef42ee72aebb0a15d"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-
-        // Função para buscar e exibir as informações do personagem
-        async function mostrarInformacoes() {
-            try {
-                // Supondo que você tenha a chave do personagem, substitua 'CHAVE_DO_PERSONAGEM' pela chave real
-                const personagemKey = '-NqEBBaYAqlTDYxA6uID';
-                const personagemRef = databaseRef(database, `personagens/${personagemKey}`);
-                const snapshot = await get(personagemRef);
-
-                if (snapshot.exists()) {
-                    const personagem = snapshot.val();
-                    exibirDadosDoPersonagem(personagem);
-                } else {
-                    console.log('Personagem não encontrado.');
-                }
-            } catch (error) {
-                console.error('Erro ao buscar informações do personagem:', error.message);
-            }
+    <script>
+        function redirectTo(page) {
+            // Adicione aqui a lógica para redirecionar para a página desejada
+            // Por exemplo, window.open(page + '.html', '_blank');
+            window.open(page + '.html', '_blank');
         }
-
-        // Função para exibir os dados do personagem na página
-        function exibirDadosDoPersonagem(personagem) {
-            const container = document.getElementById('character-info-container');
-            container.innerHTML = `
-                <div class="info-inputs">
-                    <label>Nome: ${personagem.nome}</label>
-                    <label>Ocupação: ${personagem.profissao}</label>
-                    <label>Idade: ${personagem.idade}</label>
-                    <label>Jogador: ${personagem.jogador}</label>
-                </div>
-                <div class="profile-picture-upload" id="profile-picture-container">
-                    <img id="profile-picture-preview" src="${personagem.imagemUrl}" alt="Imagem do Personagem">
-                </div>
-                <!-- Adicione mais campos conforme necessário -->
-                <div class="section values-attributes">
-                    <!-- Adicione os campos de valores e atributos aqui -->
-                </div>
-                <div class="section history">
-                    <h2>HISTORIA</h2>
-                    <p>${personagem.historia}</p>
-                </div>
-                <div class="section attributes">
-                    <!-- Adicione os campos de atributos aqui -->
-                </div>
-                <div class="section management">
-                    <!-- Adicione os campos de gerenciamento aqui -->
-                </div>
-            `;
-        }
-
-        // Chame a função para exibir as informações do personagem ao carregar a página
-        mostrarInformacoes();
     </script>
 
 </body>
-
 </html>
