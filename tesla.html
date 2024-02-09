@@ -56,8 +56,6 @@
             <div class="attributes-container" id="attributes-container">
                 <!-- Os atributos serão exibidos aqui dinamicamente -->
             </div>
-            
-            <div class="total-counter" style="text-align: right;">Total Geral: <span id="total">0</span></div>
         </div>
 
         <div class="divider"></div>
@@ -139,7 +137,6 @@
                         <!-- Os atributos serão exibidos aqui dinamicamente -->
                         ${exibirAtributos(personagem.atributos)}
                     </div>
-                    <div class="total-counter" style="text-align: right;">Total Geral: <span id="total">${calcularTotal(personagem.atributos)}</span></div>
                 </div>
                 <div class="section management">
                     <!-- Adicione os campos de gerenciamento aqui -->
@@ -152,14 +149,9 @@
             return atributos.map(atributo => `
                 <div class="attribute">
                     <label>${atributo.nome}:</label>
-                    <input type="number" value="${atributo.valor}" readonly>
+                    <span>${atributo.valor}</span>
                 </div>
             `).join('');
-        }
-
-        // Função para calcular o total dos atributos
-        function calcularTotal(atributos) {
-            return atributos.reduce((total, atributo) => total + atributo.valor, 0);
         }
 
         // Chame a função para exibir as informações do personagem ao carregar a página
