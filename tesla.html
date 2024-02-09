@@ -53,12 +53,9 @@
 
         <div class="section attributes">
             <h2>ATRIBUTOS</h2>
-            <label>Força:</label>
-            <div class="checkbox-group" id="forca-group">
-                <!-- Conteúdo dinâmico será adicionado aqui -->
+            <div class="attributes-container" id="attributes-container">
+                <!-- Os atributos serão exibidos aqui dinamicamente -->
             </div>
-
-            <!-- Adicione os campos de outros atributos aqui -->
             
             <div class="total-counter" style="text-align: right;">Total Geral: <span id="total">0</span></div>
         </div>
@@ -137,12 +134,32 @@
                     <p>${personagem.historia}</p>
                 </div>
                 <div class="section attributes">
-                    <!-- Adicione os campos de atributos aqui -->
+                    <h2>ATRIBUTOS</h2>
+                    <div class="attributes-container" id="attributes-container">
+                        <!-- Os atributos serão exibidos aqui dinamicamente -->
+                        ${exibirAtributos(personagem.atributos)}
+                    </div>
+                    <div class="total-counter" style="text-align: right;">Total Geral: <span id="total">${calcularTotal(personagem.atributos)}</span></div>
                 </div>
                 <div class="section management">
                     <!-- Adicione os campos de gerenciamento aqui -->
                 </div>
             `;
+        }
+
+        // Função para exibir os atributos dinamicamente
+        function exibirAtributos(atributos) {
+            return atributos.map(atributo => `
+                <div class="attribute">
+                    <label>${atributo.nome}:</label>
+                    <input type="number" value="${atributo.valor}" readonly>
+                </div>
+            `).join('');
+        }
+
+        // Função para calcular o total dos atributos
+        function calcularTotal(atributos) {
+            return atributos.reduce((total, atributo) => total + atributo.valor, 0);
         }
 
         // Chame a função para exibir as informações do personagem ao carregar a página
@@ -152,4 +169,3 @@
 </body>
 
 </html>
-
