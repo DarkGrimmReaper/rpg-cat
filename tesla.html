@@ -53,9 +53,14 @@
 
         <div class="section attributes">
             <h2>ATRIBUTOS</h2>
-            <div class="attributes-container" id="attributes-container">
-                <!-- Os atributos serão exibidos aqui dinamicamente -->
+            <label>Força:</label>
+            <div class="checkbox-group" id="forca-group">
+                <!-- Conteúdo dinâmico será adicionado aqui -->
             </div>
+
+            <!-- Adicione os campos de outros atributos aqui -->
+            
+            <div class="total-counter" style="text-align: right;">Total Geral: <span id="total">0</span></div>
         </div>
 
         <div class="divider"></div>
@@ -132,26 +137,12 @@
                     <p>${personagem.historia}</p>
                 </div>
                 <div class="section attributes">
-                    <h2>ATRIBUTOS</h2>
-                    <div class="attributes-container" id="attributes-container">
-                        <!-- Os atributos serão exibidos aqui dinamicamente -->
-                        ${exibirAtributos(personagem.atributos)}
-                    </div>
+                    <!-- Adicione os campos de atributos aqui -->
                 </div>
                 <div class="section management">
                     <!-- Adicione os campos de gerenciamento aqui -->
                 </div>
             `;
-        }
-
-        // Função para exibir os atributos dinamicamente
-        function exibirAtributos(atributos) {
-            return atributos.map(atributo => `
-                <div class="attribute">
-                    <label>${atributo.nome}:</label>
-                    <span>${atributo.valor}</span>
-                </div>
-            `).join('');
         }
 
         // Chame a função para exibir as informações do personagem ao carregar a página
