@@ -1,1 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
 
+    <title>Ficha de RPG - Catalogue Horror - Exibir</title>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="section personal-info">
+            <h1>Catalogue Horror</h1>
+            <div class="info-container" id="character-info-container">
+                <!-- As informações do personagem serão exibidas aqui dinamicamente -->
+            </div>
+        </div>
+
+        <!-- ... Seu HTML anterior ... -->
+
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+            import { getDatabase, ref as databaseRef, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+            // Sua configuração do Firebase
+            const firebaseConfig = {
+                apiKey: "SUA_API_KEY",
+                authDomain: "SEU_AUTH_DOMAIN",
+                projectId: "SEU_PROJECT_ID",
+                storageBucket: "SEU_STORAGE_BUCKET",
+                messagingSenderId: "SEU_MESSAGING_SENDER_ID",
+                appId: "SEU_APP_ID"
+            };
+
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+
+            // Função para buscar e exibir as informações do personagem
+            async function mostrarInformacoes() {
+                try {
+                    // Supondo que você tenha a chave do personagem, substitua 'CHAVE_DO_PERSONAGEM' pela chave real
+                    const personagemKey = 'CHAVE_DO_PERSONAGEM';
+                    const personagemRef = databaseRef(database, `personagens/${personagemKey}`);
+                    const snapshot = await get(personagemRef);
+
+                    if (snapshot.exists()) {
+                        const personagem = snapshot.val();
+                        exibirDadosDoPersonagem(personagem);
+                    } else {
+                        console.log('Personagem não encontrado.');
+                    }
+                } catch (error) {
+                    console.error('Erro ao buscar informações do personagem:', error.message);
+                }
+            }
+
+            // Função para exibir os dados do personagem na página
+            function exibirDadosDoPersonagem(personagem) {
+                const container = document.getElementById('character-info-container');
+                container.innerHTML = `
+                    <div class="info-inputs">
+                        <label>Nome: ${personagem.nome}</label>
+                        <label>Ocupação: ${personagem.profissao}</label>
+                        <label>Idade: ${personagem.idade}</label>
+                        <label>Jogador: ${personagem.jogador}</label>
+                    </div>
+                    <div class="profile-picture-upload" id="profile-picture-container">
+                        <img id="profile-picture-preview" src="${personagem.imagemUrl}" alt="Imagem do Personagem">
+                    </div>
+                    <!-- Adicione mais campos conforme necessário -->
+                    <div class="section values-attributes">
+                        <!-- Adicione os campos de valores e atributos aqui -->
+                    </div>
+                    <div class="section history">
+                        <h2>HISTORIA</h2>
+                        <p>${personagem.historia}</p>
+                    </div>
+                    <div class="section attributes">
+                        <!-- Adicione os campos de atributos aqui -->
+                    </div>
+                    <div class="section management">
+                        <!-- Adicione os campos de gerenciamento aqui -->
+                    </div>
+                `;
+            }
+
+            // Chame a função para exibir as informações do personagem ao carregar a página
+            mostrarInformacoes();
+        </script>
+
+        <!-- ... Seu HTML anterior ... -->
+
+    </div>
+</body>
+</html>
