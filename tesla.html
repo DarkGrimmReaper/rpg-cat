@@ -21,9 +21,18 @@
         
         <div class="section values-attributes">
             <div class="left-values">
-                <label>Stamina/Hp: <span id="stamina">20</span></label>
-                <label>Sanity: <span id="sanity">20</span></label>
+                <label>Stamina/Hp: 
+                    <button onclick="updateStamina(-1)">-</button>
+                    <span id="stamina">20</span>
+                    <button onclick="updateStamina(1)">+</button>
+                </label>
+                <label>Sanity: 
+                    <button onclick="updateSanity(-1)">-</button>
+                    <span id="sanity">20</span>
+                    <button onclick="updateSanity(1)">+</button>
+                </label>
             </div>
+
             <div class="right-values">
                 <label>Survive:</label>
                 <div class="checkbox-group no-interaction">
@@ -136,6 +145,23 @@
                     <!-- Adicione os campos de gerenciamento aqui -->
                 </div>
             `;
+        }
+
+        // Funções para adicionar ou remover pontos de Stamina e Sanity
+        function updateStamina(delta) {
+            const staminaElement = document.getElementById('stamina');
+            const currentStamina = parseInt(staminaElement.innerText);
+            const newStamina = Math.max(0, currentStamina + delta); // Impede que a Stamina seja menor que 0
+        
+            staminaElement.innerText = newStamina;
+        }
+        
+        function updateSanity(delta) {
+            const sanityElement = document.getElementById('sanity');
+            const currentSanity = parseInt(sanityElement.innerText);
+            const newSanity = Math.max(0, currentSanity + delta); // Impede que a Sanity seja menor que 0
+        
+            sanityElement.innerText = newSanity;
         }
 
         // Chame a função para exibir as informações do personagem ao carregar a página
