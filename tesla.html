@@ -81,22 +81,61 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref as databaseRef, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+            import { getDatabase, ref as databaseRef, get, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // Sua configuração do Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyD0SxSsAe2r2z2BIwgqSL-dLUZ68KT6J50",
-            authDomain: "catalogue-horror-57634.firebaseapp.com",
-            databaseURL: "https://catalogue-horror-57634-default-rtdb.firebaseio.com",
-            projectId: "catalogue-horror-57634",
-            storageBucket: "catalogue-horror-57634.appspot.com",
-            messagingSenderId: "247277750504",
-            appId: "1:247277750504:web:3ad98ef42ee72aebb0a15d"
-        };
+            // Sua configuração do Firebase
+            const firebaseConfig = {
+                apiKey: "AIzaSyD0SxSsAe2r2z2BIwgqSL-dLUZ68KT6J50",
+                authDomain: "catalogue-horror-57634.firebaseapp.com",
+                databaseURL: "https://catalogue-horror-57634-default-rtdb.firebaseio.com",
+                projectId: "catalogue-horror-57634",
+                storageBucket: "catalogue-horror-57634.appspot.com",
+                messagingSenderId: "247277750504",
+                appId: "1:247277750504:web:3ad98ef42ee72aebb0a15d"
+            };
 
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+
+            // ... (função mostrarInformacoes)
+
+            // Funções para adicionar ou remover pontos de Stamina e Sanity
+            function updateStamina(delta) {
+                const staminaElement = document.getElementById('stamina');
+                const currentStamina = parseInt(staminaElement.innerText);
+                const newStamina = Math.max(0, currentStamina + delta); // Impede que a Stamina seja menor que 0
+
+                // Atualiza visualmente
+                staminaElement.innerText = newStamina;
+
+                // Atualiza no Realtime Database
+                updateDatabase('stamina', newStamina);
+            }
+
+            function updateSanity(delta) {
+                const sanityElement = document.getElementById('sanity');
+                const currentSanity = parseInt(sanityElement.innerText);
+                const newSanity = Math.max(0, currentSanity + delta); // Impede que a Sanity seja menor que 0
+
+                // Atualiza visualmente
+                sanityElement.innerText = newSanity;
+
+                // Atualiza no Realtime Database
+                updateDatabase('sanity', newSanity);
+            }
+
+            // Função para atualizar valores no Realtime Database
+            function updateDatabase(attribute, value) {
+                try {
+                    // Supondo que você tenha a chave do personagem, substitua 'CHAVE_DO_PERSONAGEM' pela chave real
+                    const personagemKey = '-NqEBBaYAqlTDYxA6uID';
+                    const personagemRef = databaseRef(database, `personagens/${personagemKey}/${attribute}`);
+                    set(personagemRef, value);
+                } catch (error) {
+                    console.error('Erro ao atualizar no banco de dados:', error.message);
+                }
+            }
 
         // Função para buscar e exibir as informações do personagem
         async function mostrarInformacoes() {
@@ -145,23 +184,6 @@
                     <!-- Adicione os campos de gerenciamento aqui -->
                 </div>
             `;
-        }
-
-        // Funções para adicionar ou remover pontos de Stamina e Sanity
-        function updateStamina(delta) {
-            const staminaElement = document.getElementById('stamina');
-            const currentStamina = parseInt(staminaElement.innerText);
-            const newStamina = Math.max(0, currentStamina + delta); // Impede que a Stamina seja menor que 0
-        
-            staminaElement.innerText = newStamina;
-        }
-        
-        function updateSanity(delta) {
-            const sanityElement = document.getElementById('sanity');
-            const currentSanity = parseInt(sanityElement.innerText);
-            const newSanity = Math.max(0, currentSanity + delta); // Impede que a Sanity seja menor que 0
-        
-            sanityElement.innerText = newSanity;
         }
 
         // Chame a função para exibir as informações do personagem ao carregar a página
