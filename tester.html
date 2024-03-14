@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha de Personagem</title>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Ficha de Personagem</h1>
+        <div id="character-info"></div>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref as databaseRef, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0SxSsAe2r2z2BIwgqSL-dLUZ68KT6J50",
+            authDomain: "catalogue-horror-57634.firebaseapp.com",
+            projectId: "catalogue-horror-57634",
+            databaseURL: "https://catalogue-horror-57634-default-rtdb.firebaseio.com",
+            storageBucket: "catalogue-horror-57634.appspot.com",
+            messagingSenderId: "247277750504",
+            appId: "1:247277750504:web:3ad98ef42ee72aebb0a15d"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        // Initialize Realtime Database
+        const database = getDatabase(app);
+
+        // Function to fetch character data from Firebase
+        async function fetchCharacterData() {
+            try {
+                const snapshot = await get(databaseRef(database, 'personagens'));
+                const characters = snapshot.val();
+
+                // Assuming you have only one character in the database for this example
+                const characterKey = Object.keys(characters)[0];
+                const character = characters[characterKey];
+
+                // Display character information
+                displayCharacter(character);
+            } catch (error) {
+                console.error('Error fetching character data:', error.message);
+            }
+        }
+
+        // Function to display character information
+        function displayCharacter(character) {
+            const characterInfoDiv = document.getElementById('character-info');
+            characterInfoDiv.innerHTML = `
+                <div>
+                    <img src="${character.imagemUrl}" alt="Profile Picture">
+                    <h2>${character.nome}</h2>
+                    <p><strong>Profissão:</strong> ${character.profissao}</p>
+                    <p><strong>Idade:</strong> ${character.idade}</p>
+                    <p><strong>Jogador:</strong> ${character.jogador}</p>
+                    <p><strong>Stamina/Hp:</strong> ${character.stamina}</p>
+                    <p><strong>Sanity:</strong> ${character.sanity}</p>
+                    <p><strong>Historia:</strong> ${character.historia}</p>
+                    <!-- Include other character attributes here -->
+                </div>
+            `;
+        }
+
+        // Call the fetchCharacterData function when the page loads
+        window.onload = fetchCharacterData;
+    </script>
+</body>
+</html>
