@@ -49,28 +49,62 @@
         function displayCharacter(character) {
             const characterInfoDiv = document.getElementById('character-info');
             characterInfoDiv.innerHTML = `
-                <div>
-                    <img src="${character.imagemUrl}" alt="Profile Picture">
-                    <h2>${character.nome}</h2>
-                    <p><strong>Profissão:</strong> ${character.profissao}</p>
-                    <p><strong>Idade:</strong> ${character.idade}</p>
-                    <p><strong>Jogador:</strong> ${character.jogador}</p>
-                    <p><strong>Stamina/Hp:</strong> <span id="stamina" contenteditable>${character.stamina}</span></p>
-                    <p><strong>Sanity:</strong> <span id="sanity" contenteditable>${character.sanity}</span></p>
-                    <p><strong>Historia:</strong> ${character.historia}</p>
-                    <p><strong>Força:</strong> ${character.forca}</p>
-                    <p><strong>Destreza:</strong> ${character.destreza}</p>
-                    <p><strong>Percepção:</strong> ${character.percepcao}</p>
-                    <p><strong>Conhecimento:</strong> ${character.conhecimento}</p>
-                    <p><strong>Carisma:</strong> ${character.carisma}</p>
-                    <p><strong>Fundos:</strong> ${character.fundos}</p>
-                    <p><strong>Status:</strong> ${character.status}</p>
-                    <p><strong>Magias e Rituais:</strong> ${character.magia}</p>
-                    <p><strong>Inventário e Equipamento:</strong> ${character.inventario}</p>
-                    <p><strong>Aliados e Conexões:</strong> ${character.aliados}</p>
-                    <p><strong>Cicatrizes e Amputações:</strong> ${character.lesoes}</p>
-                    <!-- Include other character attributes here -->
+                <div class="section personal-info" id="character-info-container">
+                    <div class="info-inputs">
+                        <label>Nome: ${character.nome}</label>
+                        <label>Ocupação: ${character.profissao}</label>
+                        <label>Idade: ${character.idade}</label>
+                        <label>Jogador: ${character.jogador}</label>
+                    </div>
+                    <div class="profile-picture-upload" id="profile-picture-container">
+                        <img id="profile-picture-preview" src="${character.imagemUrl}" alt="Imagem do Personagem">
+                    </div>
                 </div>
+
+                <div class="divider"></div>
+
+                <div class="section values-attributes">
+                    <div class="left-values">
+                        <label>Stamina/Hp: <span id="stamina" contenteditable>${character.stamina}</span></label>
+                        <label>Sanity: <span id="sanity" contenteditable>${character.sanity}</span></label>
+                    </div>
+                    <div class="right-values">
+                        <label>Jogos: <span id="jogos" contenteditable>${character.jogos}</span></label>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="section history">
+                    <h2>HISTORIA</h2>
+                    <p>${character.historia}</p>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="section attributes">
+                    <h2>ATRIBUTOS</h2>
+                    <label>Força: <span id="forca">${character.forca}</span></label>
+                    <label>Destreza: <span id="destreza">${character.destreza}</span></label>
+                    <label>Percepção: <span id="percepcao">${character.percepcao}</span></label>
+                    <label>Conhecimento: <span id="conhecimento">${character.conhecimento}</span></label>
+                    <label>Carisma: <span id="carisma">${character.carisma}</span></label>
+                    <label>Fundos: <span id="fundos">${character.fundos}</span></label>
+                    <div class="total-counter" style="text-align: right;">Total Geral: <span id="total">0</span></div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="section management">
+                    <h2>GERENCIAMENTO</h2>
+                    <label>Status: <p id="status">${character.status}</p></label>
+                    <label>Magias e Rituais: <p id="magia">${character.magia}</p></label>
+                    <label>Inventário e Equipamento: <p id="inventario">${character.inventario}</p></label>
+                    <label>Aliados e Conecções: <p id="aliados">${character.aliados}</p></label>
+                    <label>Cicatrizes e Amputações: <p id="lesoes">${character.lesoes}</p></label>
+                </div>
+
+                <button type="button" onclick="handleFormSubmit(event)">Enviar</button>
             `;
             
             // Event listeners for editable fields
