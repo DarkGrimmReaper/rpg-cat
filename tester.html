@@ -34,15 +34,11 @@
         // Initialize Realtime Database
         const database = getDatabase(app);
 
-        // Function to fetch character data from Firebase
-        async function fetchCharacterData() {
+        // Function to fetch character data from Firebase based on ID
+        async function fetchCharacterData(characterId) {
             try {
-                const snapshot = await get(databaseRef(database, 'personagens'));
-                const characters = snapshot.val();
-
-                // Assuming you have only one character in the database for this example
-                const characterKey = Object.keys(characters)[0];
-                const character = characters[characterKey];
+                const snapshot = await get(databaseRef(database, 'personagens/' + characterId));
+                const character = snapshot.val();
 
                 // Display character information
                 displayCharacter(character);
@@ -53,29 +49,38 @@
 
         // Function to display character information
         function displayCharacter(character) {
-    const characterInfoDiv = document.getElementById('character-info');
-    characterInfoDiv.innerHTML = `
-        <div>
-            <img src="${character.imagemUrl}" alt="Profile Picture">
-            <h2>${character.nome}</h2>
-            <p><strong>Profissão:</strong> ${character.profissao}</p>
-            <p><strong>Idade:</strong> ${character.idade}</p>
-            <p><strong>Jogador:</strong> ${character.jogador}</p>
-            <p><strong>Stamina/Hp:</strong> ${character.stamina}</p>
-            <p><strong>Sanity:</strong> ${character.sanity}</p>
-            <p><strong>Historia:</strong> ${character.historia}</p>
-            <!-- Include other character attributes here -->
-            <p><strong>Destreza:</strong> ${character.destreza}</p>
-            <p><strong>Percepção:</strong> ${character.percepcao}</p>
-            <p><strong>Conhecimento:</strong> ${character.conhecimento}</p>
-            <!-- Include other attributes as needed -->
-        </div>
-    `;
-}
+            const characterInfoDiv = document.getElementById('character-info');
+            characterInfoDiv.innerHTML = `
+                <div>
+                    <img src="${character.imagemUrl}" alt="Profile Picture">
+                    <h2>${character.nome}</h2>
+                    <p><strong>Profissão:</strong> ${character.profissao}</p>
+                    <p><strong>Idade:</strong> ${character.idade}</p>
+                    <p><strong>Jogador:</strong> ${character.jogador}</p>
+                    <p><strong>Stamina/Hp:</strong> ${character.stamina}</p>
+                    <p><strong>Sanity:</strong> ${character.sanity}</p>
+                    <p><strong>Historia:</strong> ${character.historia}</p>
+                    <p><strong>Força:</strong> ${character.forca}</p>
+                    <p><strong>Destreza:</strong> ${character.destreza}</p>
+                    <p><strong>Percepção:</strong> ${character.percepcao}</p>
+                    <p><strong>Conhecimento:</strong> ${character.conhecimento}</p>
+                    <p><strong>Carisma:</strong> ${character.carisma}</p>
+                    <p><strong>Fundos:</strong> ${character.fundos}</p>
+                    <p><strong>Status:</strong> ${character.status}</p>
+                    <p><strong>Magias e Rituais:</strong> ${character.magia}</p>
+                    <p><strong>Inventário e Equipamento:</strong> ${character.inventario}</p>
+                    <p><strong>Aliados e Conexões:</strong> ${character.aliados}</p>
+                    <p><strong>Cicatrizes e Amputações:</strong> ${character.lesoes}</p>
+                    <!-- Include other character attributes here -->
+                </div>
+            `;
+        }
 
-
-        // Call the fetchCharacterData function when the page loads
-        window.onload = fetchCharacterData;
+        // Call the fetchCharacterData function with the character ID when the page loads
+        window.onload = function() {
+            const characterId = "YOUR_CHARACTER_ID"; // Substitua pelo ID do personagem desejado
+            fetchCharacterData(characterId);
+        };
     </script>
 </body>
 </html>
