@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css"> <!-- Mantenha esta linha para o mesmo estilo da página de cadastro -->
+    <title>Ficha de Personagem</title>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Ficha de Personagem</h1>
+        <div id="character-info"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref as databaseRef, get, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0SxSsAe2r2z2BIwgqSL-dLUZ68KT6J50",
+            authDomain: "catalogue-horror-57634.firebaseapp.com",
+            projectId: "catalogue-horror-57634",
+            databaseURL: "https://catalogue-horror-57634-default-rtdb.firebaseio.com",
+            storageBucket: "catalogue-horror-57634.appspot.com",
+            messagingSenderId: "247277750504",
+            appId: "1:247277750504:web:3ad98ef42ee72aebb0a15d"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Function to fetch character data from Firebase based on ID
+        async function fetchCharacterData(characterId) {
+            try {
+                const snapshot = await get(databaseRef(database, 'personagens/' + characterId));
+                const character = snapshot.val();
+
+                // Display character information
+                displayCharacter(character);
+            } catch (error) {
+                console.error('Error fetching character data:', error.message);
+            }
+        }
+
+        // Function to display character information
+        function displayCharacter(character) {
+            const characterInfoDiv = document.getElementById('character-info');
+            characterInfoDiv.innerHTML = `
+                <div>
+                    <img src="${character.imagemUrl}" alt="Profile Picture">
+                    <h2>${character.nome}</h2>
+                    <p><strong>Profissão:</strong> ${character.profissao}</p>
+                    <p><strong>Idade:</strong> ${character.idade}</p>
+                    <p><strong>Jogador:</strong> ${character.jogador}</p>
+                    <p><strong>Stamina/Hp:</strong> <span id="stamina" contenteditable>${character.stamina}</span></p>
+                    <p><strong>Sanity:</strong> <span id="sanity" contenteditable>${character.sanity}</span></p>
+                    <p><strong>Historia:</strong> ${character.historia}</p>
+                    <p><strong>Força:</strong> ${character.forca}</p>
+                    <p><strong>Destreza:</strong> ${character.destreza}</p>
+                    <p><strong>Percepção:</strong> ${character.percepcao}</p>
+                    <p><strong>Conhecimento:</strong> ${character.conhecimento}</p>
+                    <p><strong>Carisma:</strong> ${character.carisma}</p>
+                    <p><strong>Fundos:</strong> ${character.fundos}</p>
+                    <p><strong>Status:</strong> ${character.status}</p>
+                    <p><strong>Magias e Rituais:</strong> ${character.magia}</p>
+                    <p><strong>Inventário e Equipamento:</strong> ${character.inventario}</p>
+                    <p><strong>Aliados e Conexões:</strong> ${character.aliados}</p>
+                    <p><strong>Cicatrizes e Amputações:</strong> ${character.lesoes}</p>
+                    <!-- Include other character attributes here -->
+                </div>
+            `;
+            
+            // Event listeners for editable fields
+            const staminaField = document.getElementById('stamina');
+            const sanityField = document.getElementById('sanity');
+            
+            staminaField.addEventListener('blur', () => updateCharacterAttribute('stamina', staminaField.innerText));
+            sanityField.addEventListener('blur', () => updateCharacterAttribute('sanity', sanityField.innerText));
+        }
+
+        // Function to update character attribute in Firebase
+        async function updateCharacterAttribute(attribute, value) {
+            try {
+                const characterId = "-NsyfvsNKsCIzcEx8waq"; // ID do personagem
+                const characterRef = databaseRef(database, `personagens/${characterId}/${attribute}`);
+                await set(characterRef, value);
+                console.log(`Attribute '${attribute}' updated successfully.`);
+            } catch (error) {
+                console.error(`Error updating attribute '${attribute}': ${error.message}`);
+            }
+        }
+
+        // Call the fetchCharacterData function with the character ID when the page loads
+        window.onload = function() {
+            const characterId = "-NsyfvsNKsCIzcEx8waq"; // Substitua pelo ID do personagem desejado
+            fetchCharacterData(characterId);
+        };
+    </script>
+</body>
+</html>
