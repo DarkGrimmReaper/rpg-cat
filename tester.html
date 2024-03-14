@@ -49,33 +49,43 @@
         }
 
         // Function to display character information
-        function displayCharacter(character) {
-            const characterInfoDiv = document.getElementById('character-info');
-            characterInfoDiv.innerHTML = `
-                <div>
-                    <img src="${character.imagemUrl}" alt="Profile Picture">
-                    <h2>${character.nome}</h2>
-                    <p><strong>Profissão:</strong> ${character.profissao}</p>
-                    <p><strong>Idade:</strong> ${character.idade}</p>
-                    <p><strong>Jogador:</strong> ${character.jogador}</p>
-                    <p><strong>Stamina/Hp:</strong> ${character.stamina}</p>
-                    <p><strong>Sanity:</strong> ${character.sanity}</p>
-                    <p><strong>Historia:</strong> ${character.historia}</p>
-                    <p><strong>Força:</strong> ${character.forca}</p>
-                    <p><strong>Destreza:</strong> ${character.destreza}</p>
-                    <p><strong>Percepção:</strong> ${character.percepcao}</p>
-                    <p><strong>Conhecimento:</strong> ${character.conhecimento}</p>
-                    <p><strong>Carisma:</strong> ${character.carisma}</p>
-                    <p><strong>Fundos:</strong> ${character.fundos}</p>
-                    <p><strong>Status:</strong> ${character.status}</p>
-                    <p><strong>Magias e Rituais:</strong> ${character.magia}</p>
-                    <p><strong>Inventário e Equipamento:</strong> ${character.inventario}</p>
-                    <p><strong>Aliados e Conexões:</strong> ${character.aliados}</p>
-                    <p><strong>Cicatrizes e Amputações:</strong> ${character.lesoes}</p>
-                    <!-- Include other character attributes here -->
-                </div>
-            `;
-        }
+function displayCharacter(character) {
+    const characterInfoDiv = document.getElementById('character-info');
+    characterInfoDiv.innerHTML = `
+        <div>
+            <img src="${character.imagemUrl}" alt="Profile Picture">
+            <h2>${character.nome}</h2>
+            <p><strong>Profissão:</strong> ${character.profissao}</p>
+            <p><strong>Idade:</strong> ${character.idade}</p>
+            <p><strong>Jogador:</strong> ${character.jogador}</p>
+            <p><strong>Stamina/Hp:</strong> <span id="stamina" contenteditable>${character.stamina}</span></p>
+            <p><strong>Sanity:</strong> <span id="sanity" contenteditable>${character.sanity}</span></p>
+            <p><strong>Historia:</strong> ${character.historia}</p>
+            <p><strong>Força:</strong> ${character.forca}</p>
+            <!-- Other attributes -->
+        </div>
+    `;
+    
+    // Event listeners for editable fields
+    const staminaField = document.getElementById('stamina');
+    const sanityField = document.getElementById('sanity');
+    
+    staminaField.addEventListener('blur', () => updateCharacterAttribute('stamina', staminaField.innerText));
+    sanityField.addEventListener('blur', () => updateCharacterAttribute('sanity', sanityField.innerText));
+}
+
+// Function to update character attribute in Firebase
+async function updateCharacterAttribute(attribute, value) {
+    try {
+        const characterId = "-NsyfvsNKsCIzcEx8waq"; // ID do personagem
+        const characterRef = databaseRef(database, `personagens/${characterId}/${attribute}`);
+        await set(characterRef, value);
+        console.log(`Attribute '${attribute}' updated successfully.`);
+    } catch (error) {
+        console.error(`Error updating attribute '${attribute}': ${error.message}`);
+    }
+}
+
 
         // Call the fetchCharacterData function with the character ID when the page loads
         window.onload = function() {
