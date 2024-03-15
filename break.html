@@ -5,6 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles.css"> <!-- Mantenha esta linha para o mesmo estilo da página de cadastro -->
     <title>Ficha de Personagem</title>
+
+    <style>
+        .attributes {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .attributes .left-column,
+        .attributes .right-column {
+            flex: 1;
+        }
+
+        .attributes .left-column label,
+        .attributes .right-column label {
+            display: block;
+        }
 </head>
 <body>
 
@@ -96,15 +112,21 @@
                 <div class="divider"></div>
 
                 <div class="section attributes">
-                    <h2>ATRIBUTOS</h2>
+            <h2>ATRIBUTOS</h2>
+            <div class="attributes">
+                <div class="left-column">
                     <label>Força: <span id="forca">${character.forca}</span></label>
                     <label>Destreza: <span id="destreza">${character.destreza}</span></label>
                     <label>Percepção: <span id="percepcao">${character.percepcao}</span></label>
+                </div>
+                <div class="right-column">
                     <label>Conhecimento: <span id="conhecimento">${character.conhecimento}</span></label>
                     <label>Carisma: <span id="carisma">${character.carisma}</span></label>
                     <label>Fundos: <span id="fundos">${character.fundos}</span></label>
-                    <div class="total-counter" style="text-align: right;">Total Geral: <span id="total">0</span></div>
                 </div>
+            </div>
+            <div class="total-counter" style="text-align: right;">Total Geral: <span id="total">0</span></div>
+        </div>
 
                 <div class="divider"></div>
 
