@@ -133,7 +133,7 @@
         // Function to update character attribute in Firebase
         async function updateCharacterAttribute(attribute, value) {
             try {
-                const characterId = "-NsyfvsNKsCIzcEx8waq"; // ID do personagem
+                const characterId = "-NqEC3ESzjBGG8KC5xAu"; // ID do personagem
                 const characterRef = databaseRef(database, `personagens/${characterId}/${attribute}`);
                 await set(characterRef, value);
                 console.log(`Attribute '${attribute}' updated successfully.`);
