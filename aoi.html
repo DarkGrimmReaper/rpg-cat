@@ -1,157 +1,152 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles.css"> <!-- Mantenha esta linha para o mesmo estilo da página de cadastro -->
-
-    <title>Ficha de RPG - Catalogue Horror - Exibir</title>
+    <title>Ficha de Personagem</title>
 </head>
-
 <body>
 
     <div class="container">
-
-        <div class="section personal-info" id="character-info-container">
-            <!-- As informações do personagem serão exibidas aqui dinamicamente -->
-        </div>
-
-        <div class="divider"></div>
-        
-        <div class="section values-attributes">
-            <div class="left-values">
-                <label>Stamina/Hp: <span id="stamina" contenteditable="true">20</span></label>
-                <label>Sanity: <span id="sanity" contenteditable="true">20</span></label>
-            </div>
-            <div class="right-values">
-                <label>Survive:</label>
-                <div class="checkbox-group no-interaction">
-                    <h4>Player</h4>
-                    <label><input type="checkbox" name="sobreviver_player" value="player" class="no-interaction"></label>
-                    <label><input type="checkbox" name="sobreviver_player" value="player" class="no-interaction"></label>
-                    <label><input type="checkbox" name="sobreviver_player" value="player" class="no-interaction"></label>
-                </div>
-                <div class="checkbox-group no-interaction">
-                    <h4>Morte</h4>
-                    <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
-                    <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
-                    <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
-                </div>
-                <label>Jogos: <span id="jogos" contenteditable="true">0</span></label>
-            </div>
-        </div>
-
-
-        <div class="divider"></div>
-
-        <div class="section history">
-            <h2>HISTORIA</h2>
-            <p id="historia">História do personagem será exibida aqui.</p>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="section attributes">
-            <h2>ATRIBUTOS</h2>
-            <label>Força: <span id="forca">3</span></label>
-            <label>Destreza: <span id="destreza">3</span></label>
-            <label>Percepcao: <span id="percepcao">3</span></label>
-            <label>Conhecimento: <span id="conhecimento">3</span></label>
-            <label>Carisma: <span id="carisma">3</span></label>
-            <label>Fundos: <span id="fundos">3</span></label>
-            
-            <div class="total-counter" style="text-align: right;">Total Geral: <span id="total">0</span></div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="section management">
-            <h2>GERENCIAMENTO</h2>
-            <label>Status: <p id="status">Status do personagem será exibido aqui.</p></label>
-            <label>Magias e Rituais: <p id="magia">Magias e rituais do personagem serão exibidos aqui.</p></label>
-            <label>Inventário e Equipamento: <p id="inventario">- Registros Clínicos: Acesso a registros de pesquisas anteriores, com informações sobre os Alternates, e teste para identifica-los.<br>  
-                - Domínio da Mente:  Resistencia a ataques de sanidade (+2 pontos em um dos dados). <br>
-                - Empatia:  Pode identificar mudanças de personalidade em conhecidos, pode ajudar a aliviar os efeitos de dano a sanidade (+2 de sanidade a todos por descanso curto).</p></label>
-            <label>Aliados e Conecções: <p id="aliados">Aliados e conexões do personagem serão exibidos aqui.</p></label>
-            <label>Cicatrizes e Amputações: <p id="lesoes">Cicatrizes e amputações do personagem serão exibidas aqui.</p></label>
-
-            <button type="button" onclick="handleFormSubmit(event)">Enviar</button>
-        </div>
-
+        <h1>Ficha de Personagem</h1>
+        <div id="character-info"></div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref as databaseRef, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref as databaseRef, get, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // Sua configuração do Firebase
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyD0SxSsAe2r2z2BIwgqSL-dLUZ68KT6J50",
             authDomain: "catalogue-horror-57634.firebaseapp.com",
-            databaseURL: "https://catalogue-horror-57634-default-rtdb.firebaseio.com",
             projectId: "catalogue-horror-57634",
+            databaseURL: "https://catalogue-horror-57634-default-rtdb.firebaseio.com",
             storageBucket: "catalogue-horror-57634.appspot.com",
             messagingSenderId: "247277750504",
             appId: "1:247277750504:web:3ad98ef42ee72aebb0a15d"
         };
 
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Função para buscar e exibir as informações do personagem
-        async function mostrarInformacoes() {
+        // Function to fetch character data from Firebase based on ID
+        async function fetchCharacterData(characterId) {
             try {
-                // Supondo que você tenha a chave do personagem, substitua 'CHAVE_DO_PERSONAGEM' pela chave real
-                const personagemKey = '-NqEC3ESzjBGG8KC5xAu';
-                const personagemRef = databaseRef(database, `personagens/${personagemKey}`);
-                const snapshot = await get(personagemRef);
+                const snapshot = await get(databaseRef(database, 'personagens/' + characterId));
+                const character = snapshot.val();
 
-                if (snapshot.exists()) {
-                    const personagem = snapshot.val();
-                    exibirDadosDoPersonagem(personagem);
-                } else {
-                    console.log('Personagem não encontrado.');
-                }
+                // Display character information
+                displayCharacter(character);
             } catch (error) {
-                console.error('Erro ao buscar informações do personagem:', error.message);
+                console.error('Error fetching character data:', error.message);
             }
         }
 
-        // Função para exibir os dados do personagem na página
-        function exibirDadosDoPersonagem(personagem) {
-            const container = document.getElementById('character-info-container');
-            container.innerHTML = `
-                <div class="info-inputs">
-                    <label>Nome: ${personagem.nome}</label>
-                    <label>Ocupação: ${personagem.profissao}</label>
-                    <label>Idade: ${personagem.idade}</label>
-                    <label>Jogador: ${personagem.jogador}</label>
+        // Function to display character information
+        function displayCharacter(character) {
+            const characterInfoDiv = document.getElementById('character-info');
+            characterInfoDiv.innerHTML = `
+                <div class="section personal-info" id="character-info-container">
+                    <div class="info-inputs">
+                        <label>Nome: ${character.nome}</label>
+                        <label>Ocupação: ${character.profissao}</label>
+                        <label>Idade: ${character.idade}</label>
+                        <label>Jogador: ${character.jogador}</label>
+                    </div>
+                    <div class="profile-picture-upload" id="profile-picture-container">
+                        <img id="profile-picture-preview" src="${character.imagemUrl}" alt="Imagem do Personagem">
+                    </div>
                 </div>
-                <div class="profile-picture-upload" id="profile-picture-container">
-                    <img id="profile-picture-preview" src="${personagem.imagemUrl}" alt="Imagem do Personagem">
-                </div>
-                <!-- Adicione mais campos conforme necessário -->
+
+                <div class="divider"></div>
+
                 <div class="section values-attributes">
-                    <!-- Adicione os campos de valores e atributos aqui -->
+                    <div class="left-values">
+                        <label>Stamina/Hp: <span id="stamina" contenteditable>${character.stamina}</span></label>
+                        <label>Sanity: <span id="sanity" contenteditable>${character.sanity}</span></label>
+                    </div>
+                    <div class="right-values">
+                        <label>Survive:</label>
+                        <div class="checkbox-group no-interaction">
+                            <h4>Player</h4>
+                            <label><input type="checkbox" name="sobreviver_player" value="player" class="no-interaction"></label>
+                            <label><input type="checkbox" name="sobreviver_player" value="player" class="no-interaction"></label>
+                            <label><input type="checkbox" name="sobreviver_player" value="player" class="no-interaction"></label>
+                        </div>
+                        <div class="checkbox-group no-interaction">
+                            <h4>Morte</h4>
+                            <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
+                            <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
+                            <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
+                        </div>
+                        <label>Jogos: <span id="jogos" contenteditable>${character.jogos}</span></label>
+                    </div>
                 </div>
+
+                <div class="divider"></div>
+
                 <div class="section history">
                     <h2>HISTORIA</h2>
-                    <p>${personagem.historia}</p>
+                    <p>${character.historia}</p>
                 </div>
+
+                <div class="divider"></div>
+
                 <div class="section attributes">
-                    <!-- Adicione os campos de atributos aqui -->
+                    <h2>ATRIBUTOS</h2>
+                    <label>Força: <span id="forca">${character.forca}</span></label>
+                    <label>Destreza: <span id="destreza">${character.destreza}</span></label>
+                    <label>Percepção: <span id="percepcao">${character.percepcao}</span></label>
+                    <label>Conhecimento: <span id="conhecimento">${character.conhecimento}</span></label>
+                    <label>Carisma: <span id="carisma">${character.carisma}</span></label>
+                    <label>Fundos: <span id="fundos">${character.fundos}</span></label>
+                    <div class="total-counter" style="text-align: right;">Total Geral: <span id="total">0</span></div>
                 </div>
+
+                <div class="divider"></div>
+
                 <div class="section management">
-                    <!-- Adicione os campos de gerenciamento aqui -->
+                    <h2>GERENCIAMENTO</h2>
+                    <label>Status: <p id="status">${character.status}</p></label>
+                    <label>Magias e Rituais: <p id="magia">${character.magia}</p></label>
+                    <label>Inventário e Equipamento: <p id="inventario">${character.inventario}</p></label>
+                    <label>Aliados e Conecções: <p id="aliados">${character.aliados}</p></label>
+                    <label>Cicatrizes e Amputações: <p id="lesoes">${character.lesoes}</p></label>
                 </div>
+
+                <button type="button" onclick="handleFormSubmit(event)">Enviar</button>
             `;
+            
+            // Event listeners for editable fields
+            const staminaField = document.getElementById('stamina');
+            const sanityField = document.getElementById('sanity');
+            const jogosField = document.getElementById('jogos');
+            
+            staminaField.addEventListener('blur', () => updateCharacterAttribute('stamina', staminaField.innerText));
+            sanityField.addEventListener('blur', () => updateCharacterAttribute('sanity', sanityField.innerText));
+            jogosField.addEventListener('blur', () => updateCharacterAttribute('jogos', jogosField.innerText));
         }
 
-        // Chame a função para exibir as informações do personagem ao carregar a página
-        mostrarInformacoes();
+        // Function to update character attribute in Firebase
+        async function updateCharacterAttribute(attribute, value) {
+            try {
+                const characterId = "-NsyfvsNKsCIzcEx8waq"; // ID do personagem
+                const characterRef = databaseRef(database, `personagens/${characterId}/${attribute}`);
+                await set(characterRef, value);
+                console.log(`Attribute '${attribute}' updated successfully.`);
+            } catch (error) {
+                console.error(`Error updating attribute '${attribute}': ${error.message}`);
+            }
+        }
+
+        // Call the fetchCharacterData function with the character ID when the page loads
+        window.onload = function() {
+            const characterId = "-NqEC3ESzjBGG8KC5xAu"; // Substitua pelo ID do personagem desejado
+            fetchCharacterData(characterId);
+        };
     </script>
-
 </body>
-
 </html>
