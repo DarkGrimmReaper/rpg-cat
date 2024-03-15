@@ -25,151 +25,152 @@
 </head>
 <body>
 
-    <div class="container">
-        <h1>Ficha de Personagem</h1>
-        <div id="character-info"></div>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref as databaseRef, get, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyD0SxSsAe2r2z2BIwgqSL-dLUZ68KT6J50",
-            authDomain: "catalogue-horror-57634.firebaseapp.com",
-            projectId: "catalogue-horror-57634",
-            databaseURL: "https://catalogue-horror-57634-default-rtdb.firebaseio.com",
-            storageBucket: "catalogue-horror-57634.appspot.com",
-            messagingSenderId: "247277750504",
-            appId: "1:247277750504:web:3ad98ef42ee72aebb0a15d"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-
-        // Function to fetch character data from Firebase based on ID
-        async function fetchCharacterData(characterId) {
-            try {
-                const snapshot = await get(databaseRef(database, 'personagens/' + characterId));
-                const character = snapshot.val();
-
-                // Display character information
-                displayCharacter(character);
-            } catch (error) {
-                console.error('Error fetching character data:', error.message);
-            }
-        }
-
-        // Function to display character information
-        function displayCharacter(character) {
-            const characterInfoDiv = document.getElementById('character-info');
-            characterInfoDiv.innerHTML = `
-                <div class="section personal-info" id="character-info-container">
-                    <div class="info-inputs">
-                        <label>Nome: ${character.nome}</label>
-                        <label>Ocupação: ${character.profissao}</label>
-                        <label>Idade: ${character.idade}</label>
-                        <label>Jogador: ${character.jogador}</label>
-                    </div>
-                    <div class="profile-picture-upload" id="profile-picture-container">
-                        <img id="profile-picture-preview" src="${character.imagemUrl}" alt="Imagem do Personagem">
-                    </div>
-                </div>
-
-                <div class="divider"></div>
-
-                <div class="section values-attributes">
-                    <div class="left-values">
-                        <label>Stamina/Hp: <span id="stamina" contenteditable>${character.stamina}</span></label>
-                        <label>Sanity: <span id="sanity" contenteditable>${character.sanity}</span></label>
-                    </div>
-                    <div class="right-values">
-                        <label>Survive:</label>
-                        <div class="checkbox-group no-interaction">
-                            <h4>Player</h4>
-                            <label><input type="checkbox" name="sobreviver_player" value="player" class="no-interaction"></label>
-                            <label><input type="checkbox" name="sobreviver_player" value="player" class="no-interaction"></label>
-                            <label><input type="checkbox" name="sobreviver_player" value="player" class="no-interaction"></label>
-                        </div>
-                        <div class="checkbox-group no-interaction">
-                            <h4>Morte</h4>
-                            <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
-                            <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
-                            <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
-                        </div>
-                        <label>Jogos: <span id="jogos" contenteditable>${character.jogos}</span></label>
-                    </div>
-                </div>
-
-                <div class="divider"></div>
-
-                <div class="section history">
-                    <h2>HISTORIA</h2>
-                    <p>${character.historia}</p>
-                </div>
-
-                <div class="divider"></div>
-
-                <div class="section attributes">
-    <h2 style="text-align: center;">ATRIBUTOS</h2>
-    <div class="attributes">
-        <div class="left-column">
-            <label>Força: <span id="forca">${character.forca}</span></label>
-            <label>Destreza: <span id="destreza">${character.destreza}</span></label>
-            <label>Percepção: <span id="percepcao">${character.percepcao}</span></label>
-        </div>
-        <div class="right-column">
-            <label>Conhecimento: <span id="conhecimento">${character.conhecimento}</span></label>
-            <label>Carisma: <span id="carisma">${character.carisma}</span></label>
-            <label>Fundos: <span id="fundos">${character.fundos}</span></label>
-        </div>
-    </div>
-    <div class="total-counter" style="text-align: center;">Total Geral: <span id="total">0</span></div>
+<div class="container">
+    <h1>Ficha de Personagem</h1>
+    <div id="character-info"></div>
 </div>
 
-                <div class="divider"></div>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref as databaseRef, get, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-                <div class="section management">
-                    <h2>GERENCIAMENTO</h2>
-                    <label>Status: <p id="status">${character.status}</p></label>
-                    <label>Magias e Rituais: <p id="magia">${character.magia}</p></label>
-                    <label>Inventário e Equipamento: <p id="inventario">${character.inventario}</p></label>
-                    <label>Aliados e Conecções: <p id="aliados">${character.aliados}</p></label>
-                    <label>Cicatrizes e Amputações: <p id="lesoes">${character.lesoes}</p></label>
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyD0SxSsAe2r2z2BIwgqSL-dLUZ68KT6J50",
+        authDomain: "catalogue-horror-57634.firebaseapp.com",
+        projectId: "catalogue-horror-57634",
+        databaseURL: "https://catalogue-horror-57634-default-rtdb.firebaseio.com",
+        storageBucket: "catalogue-horror-57634.appspot.com",
+        messagingSenderId: "247277750504",
+        appId: "1:247277750504:web:3ad98ef42ee72aebb0a15d"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    // Function to fetch character data from Firebase based on ID
+    async function fetchCharacterData(characterId) {
+        try {
+            const snapshot = await get(databaseRef(database, 'personagens/' + characterId));
+            const character = snapshot.val();
+
+            // Display character information
+            displayCharacter(character);
+        } catch (error) {
+            console.error('Error fetching character data:', error.message);
+        }
+    }
+
+    // Function to display character information
+    function displayCharacter(character) {
+        const characterInfoDiv = document.getElementById('character-info');
+        characterInfoDiv.innerHTML = `
+            <div class="section personal-info" id="character-info-container">
+                <div class="info-inputs">
+                    <label>Nome: ${character.nome}</label>
+                    <label>Ocupação: ${character.profissao}</label>
+                    <label>Idade: ${character.idade}</label>
+                    <label>Jogador: ${character.jogador}</label>
                 </div>
+                <div class="profile-picture-upload" id="profile-picture-container">
+                    <img id="profile-picture-preview" src="${character.imagemUrl}" alt="Imagem do Personagem">
+                </div>
+            </div>
 
-                <button type="button" onclick="handleFormSubmit(event)">Enviar</button>
-            `;
-            
-            // Event listeners for editable fields
-            const staminaField = document.getElementById('stamina');
-            const sanityField = document.getElementById('sanity');
-            const jogosField = document.getElementById('jogos');
-            
-            staminaField.addEventListener('blur', () => updateCharacterAttribute('stamina', staminaField.innerText));
-            sanityField.addEventListener('blur', () => updateCharacterAttribute('sanity', sanityField.innerText));
-            jogosField.addEventListener('blur', () => updateCharacterAttribute('jogos', jogosField.innerText));
+            <div class="divider"></div>
+
+            <div class="section values-attributes">
+                <div class="left-values">
+                    <label>Stamina/Hp: <span id="stamina" contenteditable>${character.stamina}</span></label>
+                    <label>Sanity: <span id="sanity" contenteditable>${character.sanity}</span></label>
+                </div>
+                <div class="right-values">
+                    <label>Survive:</label>
+                    <div class="checkbox-group no-interaction">
+                        <h4>Player</h4>
+                        <label><input type="checkbox" name="sobreviver_player" value="player" class="no-interaction"></label>
+                        <label><input type="checkbox" name="sobreviver_player" value="player" class="no-interaction"></label>
+                        <label><input type="checkbox" name="sobreviver_player" value="player" class="no-interaction"></label>
+                    </div>
+                    <div class="checkbox-group no-interaction">
+                        <h4>Morte</h4>
+                        <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
+                        <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
+                        <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
+                    </div>
+                    <label>Jogos: <span id="jogos" contenteditable>${character.jogos}</span></label>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="section history">
+                <h2>HISTORIA</h2>
+                <p>${character.historia}</p>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="section attributes">
+                <h2 style="text-align: center;">ATRIBUTOS</h2>
+                <div class="attributes">
+                    <div class="left-column">
+                        <label>Força: <span id="forca">${character.forca}</span></label>
+                        <label>Destreza: <span id="destreza">${character.destreza}</span></label>
+                        <label>Percepção: <span id="percepcao">${character.percepcao}</span></label>
+                    </div>
+                    <div class="right-column">
+                        <label>Conhecimento: <span id="conhecimento">${character.conhecimento}</span></label>
+                        <label>Carisma: <span id="carisma">${character.carisma}</span></label>
+                        <label>Fundos: <span id="fundos">${character.fundos}</span></label>
+                    </div>
+                </div>
+                <div class="total-counter" style="text-align: center;">Total Geral: <span id="total">0</span></div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="section management">
+                <h2>GERENCIAMENTO</h2>
+                <label>Status: <p id="status">${character.status}</p></label>
+                <label>Magias e Rituais: <p id="magia">${character.magia}</p></label>
+                <label>Inventário e Equipamento: <p id="inventario">${character.inventario}</p></label>
+                <label>Aliados e Conecções: <p id="aliados">${character.aliados}</p></label>
+                <label>Cicatrizes e Amputações: <p id="lesoes">${character.lesoes}</p></label>
+            </div>
+
+            <button type="button" onclick="handleFormSubmit(event)">Enviar</button>
+        `;
+
+        // Event listeners for editable fields
+        const staminaField = document.getElementById('stamina');
+        const sanityField = document.getElementById('sanity');
+        const jogosField = document.getElementById('jogos');
+
+        staminaField.addEventListener('blur', () => updateCharacterAttribute('stamina', staminaField.innerText));
+        sanityField.addEventListener('blur', () => updateCharacterAttribute('sanity', sanityField.innerText));
+        jogosField.addEventListener('blur', () => updateCharacterAttribute('jogos', jogosField.innerText));
+    }
+
+    // Function to update character attribute in Firebase
+    async function updateCharacterAttribute(attribute, value) {
+        try {
+            const characterId = "-NsyfvsNKsCIzcEx8waq"; // ID do personagem
+            const characterRef = databaseRef(database, `personagens/${characterId}/${attribute}`);
+            await set(characterRef, value);
+            console.log(`Attribute '${attribute}' updated successfully.`);
+        } catch (error) {
+            console.error(`Error updating attribute '${attribute}': ${error.message}`);
         }
+    }
 
-        // Function to update character attribute in Firebase
-        async function updateCharacterAttribute(attribute, value) {
-            try {
-                const characterId = "-NsyfvsNKsCIzcEx8waq"; // ID do personagem
-                const characterRef = databaseRef(database, `personagens/${characterId}/${attribute}`);
-                await set(characterRef, value);
-                console.log(`Attribute '${attribute}' updated successfully.`);
-            } catch (error) {
-                console.error(`Error updating attribute '${attribute}': ${error.message}`);
-            }
-        }
+    // Call the fetchCharacterData function with the character ID when the page loads
+    window.onload = function() {
+        const characterId = "-NsyfvsNKsCIzcEx8waq"; // Substitua pelo ID do personagem desejado
+        fetchCharacterData(characterId);
+    };
+</script>
 
-        // Call the fetchCharacterData function with the character ID when the page loads
-        window.onload = function() {
-            const characterId = "-NsyfvsNKsCIzcEx8waq"; // Substitua pelo ID do personagem desejado
-            fetchCharacterData(characterId);
-        };
-    </script>
 </body>
 </html>
