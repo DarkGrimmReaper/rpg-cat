@@ -82,9 +82,7 @@
                             <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
                             <label><input type="checkbox" name="sobreviver_morte" value="morte" class="no-interaction"></label>
                         </div>
-                        <div class="right-values">
                         <label>Jogos: <span id="jogos" contenteditable>${character.jogos}</span></label>
-                        </div>
                     </div>
                 </div>
 
@@ -125,9 +123,11 @@
             // Event listeners for editable fields
             const staminaField = document.getElementById('stamina');
             const sanityField = document.getElementById('sanity');
+            const jogosField = document.getElementById('jogos');
             
             staminaField.addEventListener('blur', () => updateCharacterAttribute('stamina', staminaField.innerText));
             sanityField.addEventListener('blur', () => updateCharacterAttribute('sanity', sanityField.innerText));
+            jogosField.addEventListener('blur', () => updateCharacterAttribute('jogos', jogosField.innerText));
         }
 
         // Function to update character attribute in Firebase
